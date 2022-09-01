@@ -7,56 +7,102 @@ import { TiStarFullOutline, TiStarHalfOutline, TiStarOutline } from 'react-icons
 /* --------------------  styled components  --------------------*/
 
 const InfoContainer = styled.div`
-margin: 0 30px;
-width: 250px;
-scroll-behavior: smooth;
+  margin: 0 30px;
+  width: 250px;
+  scroll-behavior: smooth;
 `
 const StyleContainer = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 `
 
 const AddContainer = styled.div`
-margin: 30px 0;
+  margin: 30px 0;
 `
 
 const StyleTitle = styled.div`
-display: inline-flex;
+  display: inline-flex;
+`
+
+const Title = styled.h1`
+  font-size: 24px;
+  letter-spacing: 1px;
+  font-weight: bolder;
+  color: #256D85;
+`
+
+const StyleText = styled.h4`
+  font-size: 17px;
+  margin-right: 5px;
+  color: #256D85;
+  font-weight: 400;
+  ${props =>
+    props.primary &&
+    css`
+      font-weight: bold;
+    `};
+`
+
+const Category = styled.h4`
+  line-height: 14px;
+  text-decoration: underline;
+  margin-top: 20px;
+  padding: 0;
+  font-size: 14px;
+  color: rgb(206, 151, 62);
 `
 
 const StyleEntry = styled.img`
-cursor: pointer;
-border-radius: 30px;
-border: solid 0.5px #333;
-object-fit: cover;
-height: 50px;
-width: 50px;
-margin: 5px;
-background-color: #94B49F;
+ cursor: pointer;
+  border-radius: 30px;
+  border: solid 0.5px #333;
+  object-fit: cover;
+  height: 50px;
+  width: 50px;
+  margin: 5px;
+  background-color: #94B49F;
+`
+
+const Price = styled.h2`
+  font-size: 14px;
+
+  ${props => {
+    if (props.primary) {
+      return `
+        text-decoration: line-through;
+    `
+    } else if (props.secondary) {
+      return `
+      color: rgb(206, 151, 62);
+    `
+    }
+  }}
 `
 
 const Button = styled.button`
-background: transparent;
-border-radius: 3px;
-border: 2px solid palevioletred;
-color: palevioletred;
-padding: 10px 10px;
-margin: 5px 7px;
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid #256D85;
+  color: #256D85;
+  padding: 10px 10px;
+  margin: 5px 7px;
 
-${props =>
+  ${props =>
     props.primary &&
     css`
-    background: palevioletred;
-    color: white;
-  `};
+      background: #256D85;
+      color: white;
+    `};
 `
 const Reviews = styled.a`
-margin-left: 10px;
+  margin-left: 10px;
+  text-decoration: none;
+  color: #256D85;
 `
 
-/* --------------------  styled components  --------------------*/
+/* --------------------  ProductInformation  --------------------*/
 
 function ProductInformation({
   product,
@@ -108,29 +154,23 @@ function ProductInformation({
   }
 
   const renderQty = (qty) => {
-    let result = [];
 
-    if (qty > 15) {
-      for (let i = 2; i <= 15; i++) {
-        let idR = Math.random();
-        result.push(<option value={qty} key={idR}>{i}</option>);
+    let items = [...Array(qty)].map((e, i) => {
+      if (i < 2 || i > 15) {
+        return;
+      } else {
+        return <option value={e} key={i}>{i}</option>;
       }
-    } else {
-      for (let i = 2; i <= qty; i++) {
-        let idR = Math.random();
-        result.push(<option value={qty} key={idR}>{i}</option>);
-      }
-    }
-    return result;
+    })
+
+    return items;
   }
 
   const handleQty = (e) => {
-    console.log('rdy to post??');
     setSizeSelected(true);
   }
 
 
-  // pending to use api to add to card
   async function addToCart(skusId) {
     let params = { sku_id: skusId };
     const request = await Parse.create('cart', undefined, params);
@@ -159,20 +199,20 @@ function ProductInformation({
             <Reviews href='' onClick={relatedLink}>Read all {product.totalReviews} reviews</Reviews>
           </div>
 
-          <h4>{product.category}</h4>
-          <h2>{product.name}</h2>
+          <Category>{product.category}</Category>
+          <Title>{product.name}</Title>
           {currentStyle.sale_price !== null ?
             <div>
-              <h2 style={{ textDecoration: 'line-through', fontSize: '14px' }}>${currentStyle.original_price}</h2>
-              <h2 style={{ color: '#FF0000' }}>${currentStyle.sale_price}</h2>
+              <Price primary>${currentStyle.original_price} USD</Price>
+              <Price secondary>${currentStyle.sale_price} USD</Price>
             </div>
 
-            : <h2>${product.default_price}</h2>}
+            : <Price>${product.default_price}</Price>}
 
           <div>
             <StyleTitle>
-              <h4> STYLE > </h4>
-              <h4>{currentStyle.name}</h4>
+              <StyleText primary> STYLE: </StyleText>
+              <StyleText>{product.styles[0].photos[0].thumbnail_url === null ? 'No style available' : currentStyle.name}</StyleText>
             </StyleTitle>
             <StyleContainer>
 
@@ -183,6 +223,9 @@ function ProductInformation({
                     return;
                   } else {
                     findDuplicates.push(item.photos[0].thumbnail_url);
+                    if (item.photos[0].thumbnail_url === null) {
+                      return;
+                    }
                     return (
                       <StyleEntry key={id}
                         id={item.style_id}
@@ -202,21 +245,19 @@ function ProductInformation({
 
           <AddContainer>
 
-            <select value={qty} onChange={handleSize}>
-              <option value="0">Select Size</option>
+            <Button as='select' value={qty} onChange={handleSize}>
+              <Button as='option' value="0">Select A Size</Button>
               {currentStyle &&
                 Object.values(currentStyle.skus).map((item => {
                   let idR = Math.random();
-                  return <option id={item.size} value={item.quantity} key={idR}>{item.size}</option>
+                  return <Button as='option' id={item.size} value={item.quantity} key={idR}>{item.size}</Button>
                 }))}
-            </select>
+            </Button>
 
-            <select onChange={handleQty}>
-              {qty ? <option value="1">1</option> : <option value="-">-</option>}
-              {qty &&
-                [...Array(qty)].map((e, i) => <option value={e} key={i}>{i}</option>)
-              }
-            </select>
+            <Button as='select' onChange={handleQty}>
+              {qty ? <Button as='option'>1</Button> : <Button as='option' value="-">-</Button>}
+              {qty && renderQty(qty)}
+            </Button>
 
             <Button primary onClick={(e) => { handleLocalSave(e); handleAddToCart(e); }}>ADD TO CART</Button>
             <Button onClick={handleLocalSave}><TiStarFullOutline /></Button>
