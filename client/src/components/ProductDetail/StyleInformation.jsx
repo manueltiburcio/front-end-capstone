@@ -76,7 +76,7 @@ function ProductInformation({
 
   // pending to use api to add to card
   async function addToCart(skusId) {
-    let params = skusId;
+    let params = { sku_id: skusId };
     const request = await Parse.create('cart', undefined, params);
     console.log(request.data);
   }

@@ -38,6 +38,24 @@ const App = () => {
     retrieveStorage();
   }, []);
 
+
+  // pending push info to array, save in localStorage?
+  window.onclick = e => {
+    //console.log(e.target); // element clicked
+
+    if (e.pageY < 850) {
+      console.log('you are on the overview module');
+    } else if (e.pageY < 1820) {
+      console.log('you are on the related products module');
+    } else if (e.pageY < 2327) {
+      console.log('you are on the questions and answers module');
+    } else {
+      console.log('you are on the reviews module');
+    }
+
+    //console.log('time pending to format:', Date.now());
+  }
+
   const getAverageRating = (ratings) => {
     //Get average rating through gpa style math
     let ratingValues = Object.values(ratings);

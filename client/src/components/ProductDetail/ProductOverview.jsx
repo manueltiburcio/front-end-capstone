@@ -56,7 +56,7 @@ function ProductOverview({ product, currentPhoto, currentStyle }) {
               let id = Math.random();
               return (
                 <div className='feature' key={id}>
-                  {item.value ? <p><FcCheckmark className='check' />{item.feature} and {item.value}</p> : <p><FcCheckmark className='check' />{item.feature}</p>}
+                  {item.value ? <p><FcCheckmark className='check' />{item.feature}: {item.value}</p> : <p><FcCheckmark className='check' />{item.feature}</p>}
                 </div>
               )
             })}
