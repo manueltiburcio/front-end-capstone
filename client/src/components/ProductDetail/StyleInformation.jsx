@@ -1,7 +1,62 @@
 import React, { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import Parse from '../../parse';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { TiStarFullOutline, TiStarHalfOutline, TiStarOutline } from 'react-icons/ti';
+
+/* --------------------  styled components  --------------------*/
+
+const InfoContainer = styled.div`
+margin: 0 30px;
+width: 250px;
+scroll-behavior: smooth;
+`
+const StyleContainer = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+`
+
+const AddContainer = styled.div`
+margin: 30px 0;
+`
+
+const StyleTitle = styled.div`
+display: inline-flex;
+`
+
+const StyleEntry = styled.img`
+cursor: pointer;
+border-radius: 30px;
+border: solid 0.5px #333;
+object-fit: cover;
+height: 50px;
+width: 50px;
+margin: 5px;
+background-color: #94B49F;
+`
+
+const Button = styled.button`
+background: transparent;
+border-radius: 3px;
+border: 2px solid palevioletred;
+color: palevioletred;
+padding: 10px 10px;
+margin: 5px 7px;
+
+${props =>
+    props.primary &&
+    css`
+    background: palevioletred;
+    color: white;
+  `};
+`
+const Reviews = styled.a`
+margin-left: 10px;
+`
+
+/* --------------------  styled components  --------------------*/
 
 function ProductInformation({
   product,
@@ -17,6 +72,8 @@ function ProductInformation({
   const [qty, setQty] = useState();
   const [sizeSelected, setSizeSelected] = useState(false);
   const [skusId, setSkusId] = useState();
+
+
 
 
   useEffect(() => {
@@ -47,7 +104,6 @@ function ProductInformation({
         setSkusId(parseInt(keys[i]));
       }
     }
-
     setQty(parseInt(e.target.value));
   }
 
@@ -97,10 +153,10 @@ function ProductInformation({
   return (
     <div>
       {!loading ?
-        <div className='info-container'>
+        <InfoContainer>
           <div>
             {renderAvgStars()}
-            <a href='' className='reviews' onClick={relatedLink}>Read all {product.totalReviews} reviews</a>
+            <Reviews href='' onClick={relatedLink}>Read all {product.totalReviews} reviews</Reviews>
           </div>
 
           <h4>{product.category}</h4>
@@ -114,11 +170,11 @@ function ProductInformation({
             : <h2>${product.default_price}</h2>}
 
           <div>
-            <div className='style-title'>
+            <StyleTitle>
               <h4> STYLE > </h4>
               <h4>{currentStyle.name}</h4>
-            </div>
-            <div className='style-container'>
+            </StyleTitle>
+            <StyleContainer>
 
               {
                 product.styles.map(item => {
@@ -128,23 +184,23 @@ function ProductInformation({
                   } else {
                     findDuplicates.push(item.photos[0].thumbnail_url);
                     return (
-                      <img key={id}
+                      <StyleEntry key={id}
                         id={item.style_id}
                         name={item.name}
                         onClick={(e, url, prod) => {
                           handleLocalClick(e);
                           handleStyleClick(e, item.url, item);
                         }}
-                        src={item.photos[0].thumbnail_url} className='style-entry'></img>
+                        src={item.photos[0].thumbnail_url} ></StyleEntry>
                     )
                   }
 
                 })}
 
-            </div>
+            </StyleContainer>
           </div>
 
-          <div className='add-container'>
+          <AddContainer>
 
             <select value={qty} onChange={handleSize}>
               <option value="0">Select Size</option>
@@ -162,11 +218,11 @@ function ProductInformation({
               }
             </select>
 
-            <button onClick={(e) => { handleLocalSave(e); handleAddToCart(e); }}>ADD TO CART</button>
-            <button onClick={handleLocalSave}><TiStarFullOutline /></button>
-          </div>
+            <Button primary onClick={(e) => { handleLocalSave(e); handleAddToCart(e); }}>ADD TO CART</Button>
+            <Button onClick={handleLocalSave}><TiStarFullOutline /></Button>
+          </AddContainer>
 
-        </div>
+        </InfoContainer>
         :
         <OrbitSpinner color="teal" />
       }
