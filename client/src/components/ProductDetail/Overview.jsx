@@ -7,6 +7,7 @@ import ImageGallery from './ImageGallery.jsx';
 import StyleInformation from './StyleInformation.jsx';
 import ProductOverview from './ProductOverview.jsx';
 import { select } from 'underscore';
+import { FcCheckmark } from 'react-icons/fc';
 
 function Overview() {
 
@@ -68,7 +69,6 @@ function Overview() {
 
   async function getCart() {
     const request = await Parse.getAll('cart', undefined);
-    console.log(request.data);
   }
 
 

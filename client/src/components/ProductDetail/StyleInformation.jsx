@@ -19,7 +19,7 @@ const StyleContainer = styled.div`
 `
 
 const AddContainer = styled.div`
-  margin: 30px 0;
+  margin: 30px 10px;
 `
 
 const StyleTitle = styled.div`
@@ -30,13 +30,13 @@ const Title = styled.h1`
   font-size: 24px;
   letter-spacing: 1px;
   font-weight: bolder;
-  color: #256D85;
+  color: black;
 `
 
 const StyleText = styled.h4`
   font-size: 17px;
   margin-right: 5px;
-  color: #256D85;
+  color: black;
   font-weight: 400;
   ${props =>
     props.primary &&
@@ -75,7 +75,7 @@ const Price = styled.h2`
     `
     } else if (props.secondary) {
       return `
-      color: rgb(206, 151, 62);
+      color: #850E35;
     `
     }
   }}
@@ -89,18 +89,16 @@ const Button = styled.button`
   padding: 10px 10px;
   margin: 5px 7px;
 
-  &:hover {
-    border: 2px solid white;
-    transition: ease-in-out 0.5s;
-    background-color: black;
-    color: white;
-  }
-
   ${props =>
     props.primary &&
     css`
       background: #256D85;
       color: white;
+      &:hover {
+    border: 2px solid white;
+    transition: ease-in-out 0.5s;
+    background-color: black;
+  }
     `};
 `
 const Reviews = styled.a`
@@ -214,8 +212,8 @@ function ProductInformation({
           <Title>{product.name}</Title>
           {currentStyle.sale_price !== null ?
             <div>
-              <Price primary>${currentStyle.original_price} USD</Price>
-              <Price secondary>${currentStyle.sale_price} USD</Price>
+              <Price primary>${currentStyle.original_price}</Price>
+              <Price secondary>${currentStyle.sale_price}</Price>
             </div>
 
             : <Price>${product.default_price}</Price>}

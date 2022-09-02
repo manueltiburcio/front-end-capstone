@@ -12,7 +12,12 @@ import { BsSearch, BsBag } from 'react-icons/bs'
 import QandA from './QandA/QandA.jsx';
 import { GoSearch } from 'react-icons/go';
 import { AppContext } from './AppContext.js';
+import styled, { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme, GlobalStyles } from '../themes.js';
 
+const StyledApp = styled.div`
+  color: ${(props) => props.theme.fontColor};
+`;
 
 const App = () => {
   const [outfits, setOutfits] = useState([]);
@@ -24,10 +29,14 @@ const App = () => {
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
   const [cart, setCart] = useState([]);
-  const [qanda, setQandA] = useState([]);
   const [interactions, setInteractions] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [loading, setLoading] = useState(false);
+  const [theme, setTheme] = useState('dark');
+
+  const themeToggler = () => {
+    theme === 'light' ? setTheme('dark') : setTheme('light');
+  }
 
   useEffect(() => {
     Parse.getAll(`products/`)
@@ -89,9 +98,7 @@ const App = () => {
   // DO NOT CALL updateSelectedProduct DIRECTLY
   //   IT WON'T REFRESH THE WIDGITS
   const updateSelectedProduct = (product_id) => {
-    let state = {};
     let params = `?product_id=${product_id}`;
-
     Parse.getAll(`products/`, `${product_id}`)
       .then((product) => {
         setSelectedProduct(product.data);
@@ -189,9 +196,9 @@ const App = () => {
   }
 
   const handleOutfitRemoval = (outfitData) => {
-    localStorage.removeItem('o' + JSON.stringify(outfitData.id));
+    localStorage.removeItem('o' + JSON.stringify(outfitData));
     let updatedList = [...outfits]
-    updatedList.splice(updatedList.map(outfit => outfit.id).indexOf(outfitData.id), 1)
+    updatedList.splice(updatedList.map(outfit => outfit.id).indexOf(outfitData), 1)
     setOutfits([...updatedList])
   }
 
@@ -201,71 +208,84 @@ const App = () => {
   }
 
   return (
-    <AppContext.Provider value={{
-      selectedProduct,
-      localName,
-      handleSelectedProduct,
-      handleLocalClick,
-      handleLocalSave,
-      getAverageRating,
-      getTotalReviews,
-      renderStars,
-    }}>
-      {loading ?
-        <div>
-          <div className="header">
-            <div className="logoheader">
-              <div className="logotext"><h1>Odin</h1></div>
-              <div className="logo"><GiTriquetra /></div>
+    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+      <GlobalStyles />
+      <AppContext.Provider value={{
+        selectedProduct,
+        localName,
+        handleSelectedProduct,
+        handleLocalClick,
+        handleLocalSave,
+        getAverageRating,
+        getTotalReviews,
+        renderStars,
+      }}>
+
+
+        {loading ?
+          <StyledApp>
+            {/* <div className="toggleTheme">
+            <div>Dark Mode:</div>
+            <label className="switch">
+              <input type="checkbox"></input>
+              <span className="slider round"></span>
+            </label>
+          </div> */}
+            <div className="header">
+              <button onClick={() => themeToggler()}>Change Theme</button>
+              <div className="logoheader">
+                <div className="logotext"><h1>Odin</h1></div>
+                <div className="logo"><GiTriquetra /></div>
+              </div>
+              <div className="toprightHeader">
+                <div className="searchbar"><input className="search" placeholder="Search"></input><GoSearch className="searchIcon" /></div>
+                <div className="shoppingBag"><BsBag /></div>{cart && <div className='cart'>{cart.length}</div>}
+              </div>
             </div>
-            <div className="toprightHeader">
-              <div className="searchbar"><input className="search" placeholder="Search"></input><GoSearch className="searchIcon" /></div>
-              <div className="shoppingBag"><BsBag /></div>{cart && <div className='cart'>{cart.length}</div>}
+            <div className="main">
+              <div>
+                <Overview
+                />
+              </div>
+              <div className='relatedSection'>
+                <Related
+                  selectedProduct={selectedProduct}
+                  addToOutfit={handleOutfitAdds}
+                  selectStyle={unloadComponents}
+                  avgRating={getAverageRating}
+                  starRender={renderStars} />
+              </div>
+              <div className='outfitsSection'>
+                <Outfits
+                  outfits={outfits}
+                  current={selectedProduct}
+                  outfitAdd={handleOutfitAdds}
+                  outfitRemove={handleOutfitRemoval}
+                  avgRating={getAverageRating}
+                  styleId={localId}
+                  starRender={renderStars} />
+              </div>
+              <div className="questionsSection">
+                <QandA
+                  selectedProduct={selectedProduct}
+                />
+              </div>
+              <div>
+                <Reviews
+                  totalReviews={totalReviews}
+                  averageRating={averageRating}
+                  metaData={metaData}
+                  renderStars={renderStars}
+                  productName={selectedProduct.name}
+                  productId={selectedProduct.id}
+                />
+              </div>
             </div>
-          </div>
-          <div className="main">
-            <div>
-              <Overview
-              />
-            </div>
-            <div className='relatedSection'>
-              <Related
-                selectedProduct={selectedProduct}
-                addToOutfit={handleOutfitAdds}
-                selectStyle={unloadComponents}
-                avgRating={getAverageRating}
-              />
-            </div>
-            <div>
-              <Outfits
-                outfits={outfits}
-                current={selectedProduct}
-                outfitAdd={handleOutfitAdds}
-                outfitRemove={handleOutfitRemoval}
-                avgRating={getAverageRating}
-                styleId={localId}
-              />
-            </div>
-            <div className="questionsSection">
-              <QandA
-                selectedProduct={selectedProduct}
-              />
-            </div>
-            <div>
-              <Reviews
-                totalReviews={totalReviews}
-                averageRating={averageRating}
-                metaData={metaData}
-                renderStars={renderStars}
-                productName={selectedProduct.name}
-                productId={selectedProduct.id}
-              />
-            </div>
-          </div>
-        </div>
-        : <div className="spinner"><OrbitSpinner color='teal' /></div>
-      }
-    </AppContext.Provider>
+          </StyledApp>
+          : <StyledApp className="spinner"><OrbitSpinner color='teal' /></StyledApp>
+        }
+      </AppContext.Provider>
+    </ThemeProvider>
   )
 }
 
