@@ -12,13 +12,13 @@ function Overview() {
 
   const { selectedProduct } = useContext(AppContext);
   const { handleLocalClick } = useContext(AppContext);
+  const { handleSelectedProduct } = useContext(AppContext);
   const { handleLocalSave } = useContext(AppContext);
   const { localName } = useContext(AppContext);
   const { localId } = useContext(AppContext);
   const { renderStars } = useContext(AppContext);
-  const { getAverageRating } = useContext(AppContext);
   const { getTotalReviews } = useContext(AppContext);
-  const { handleSelectedProduct } = useContext(AppContext);
+  const { getAverageRating } = useContext(AppContext);
 
   const [product, setProduct] = useState();
   const [count, setCount] = useState(1);
