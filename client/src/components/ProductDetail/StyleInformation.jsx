@@ -90,7 +90,7 @@ const Button = styled.button`
   margin: 5px 7px;
 
   &:hover {
-    border: none;
+    border: 2px solid white;
     transition: ease-in-out 0.5s;
     background-color: black;
     color: white;
