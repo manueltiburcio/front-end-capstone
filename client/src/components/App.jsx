@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import ReactDOM from 'react-dom';
 import Parse from '../parse.js';
 import axios from 'axios';
 import Related from './RelatedAndComp/Related.jsx';
@@ -12,6 +11,7 @@ import { OrbitSpinner } from 'react-epic-spinners';
 import { BsSearch, BsBag } from 'react-icons/bs'
 import QandA from './QandA/QandA.jsx';
 import { GoSearch } from 'react-icons/go';
+import { AppContext } from './AppContext.js';
 
 
 const App = () => {
@@ -195,7 +195,16 @@ const App = () => {
   }
 
   return (
-    <div>
+    <AppContext.Provider value={{
+      selectedProduct,
+      localName,
+      handleSelectedProduct,
+      handleLocalClick,
+      handleLocalSave,
+      getAverageRating,
+      getTotalReviews,
+      renderStars,
+    }}>
       {loading ?
         <div>
           <div className="header">
@@ -211,14 +220,7 @@ const App = () => {
           <div className="main">
             <div>
               <Overview
-                selectedProduct={selectedProduct}
-                localName={localName}
-                handleSelectedProduct={handleSelectedProduct}
-                handleLocalClick={handleLocalClick}
-                handleLocalSave={handleLocalSave}
-                getAverageRating={getAverageRating}
-                getTotalReviews={getTotalReviews}
-                renderStars={renderStars} />
+              />
             </div>
             <div className='relatedSection'>
               <Related
@@ -257,7 +259,7 @@ const App = () => {
         </div>
         : <div className="spinner"><OrbitSpinner color='teal' /></div>
       }
-    </div>
+    </AppContext.Provider>
   )
 }
 

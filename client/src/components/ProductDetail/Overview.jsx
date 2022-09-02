@@ -1,24 +1,25 @@
 import axios from 'axios';
-import React, { useState, createContext, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import Parse from '../../parse.js';
 import { OrbitSpinner } from 'react-epic-spinners';
-import { OverviewProvider } from './OverviewContext.js';
+import { AppContext } from '../AppContext.js';
 import ImageGallery from './ImageGallery.jsx';
 import StyleInformation from './StyleInformation.jsx';
 import ProductOverview from './ProductOverview.jsx';
 import { select } from 'underscore';
 
-function Overview({
-  selectedProduct,
-  handleLocalClick,
-  handleLocalSave,
-  localName,
-  localId,
-  renderStars,
-  getAverageRating,
-  getTotalReviews,
-  handleSelectedProduct,
-}) {
+function Overview() {
+
+  const { selectedProduct } = useContext(AppContext);
+  const { handleLocalClick } = useContext(AppContext);
+  const { handleLocalSave } = useContext(AppContext);
+  const { localName } = useContext(AppContext);
+  const { localId } = useContext(AppContext);
+  const { renderStars } = useContext(AppContext);
+  const { getAverageRating } = useContext(AppContext);
+  const { getTotalReviews } = useContext(AppContext);
+  const { handleSelectedProduct } = useContext(AppContext);
+
   const [product, setProduct] = useState();
   const [count, setCount] = useState(1);
   const [stylesList, setStylesList] = useState([]);
