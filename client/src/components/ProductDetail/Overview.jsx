@@ -10,18 +10,19 @@ import { select } from 'underscore';
 
 function Overview() {
 
-  const { selectedProduct } = useContext(AppContext);
-  const { handleLocalClick } = useContext(AppContext);
-  const { handleSelectedProduct } = useContext(AppContext);
-  const { handleLocalSave } = useContext(AppContext);
-  const { localName } = useContext(AppContext);
-  const { localId } = useContext(AppContext);
-  const { renderStars } = useContext(AppContext);
-  const { getTotalReviews } = useContext(AppContext);
-  const { getAverageRating } = useContext(AppContext);
+  const { selectedProduct,
+    handleLocalClick,
+    handleSelectedProduct,
+    handleLocalSave,
+    localName,
+    localId,
+    renderStars,
+    getTotalReviews,
+    getAverageRating } = useContext(AppContext);
+
+
 
   const [product, setProduct] = useState();
-  const [count, setCount] = useState(1);
   const [stylesList, setStylesList] = useState([]);
   const [currentPhoto, setCurrentPhoto] = useState('');
   const [currentStyle, setCurrentStyle] = useState();
@@ -33,6 +34,7 @@ function Overview() {
 
   useEffect(() => {
     fetchData(selectedProduct);
+    getCart();
   }, [])
 
   async function fetchData(productId) {
@@ -64,6 +66,10 @@ function Overview() {
     }
   }
 
+  async function getCart() {
+    const request = await Parse.getAll('cart', undefined);
+    console.log(request.data);
+  }
 
 
   /* --------------------  style selection events  --------------------*/

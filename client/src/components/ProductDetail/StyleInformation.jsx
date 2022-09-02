@@ -4,7 +4,7 @@ import Parse from '../../parse';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { TiStarFullOutline, TiStarHalfOutline, TiStarOutline } from 'react-icons/ti';
 
-/* --------------------  styled components  --------------------*/
+/* --------------------  styled-components  --------------------*/
 
 const InfoContainer = styled.div`
   margin: 0 30px;
@@ -50,12 +50,12 @@ const Category = styled.h4`
   text-decoration: underline;
   margin-top: 20px;
   padding: 0;
-  font-size: 14px;
-  color: rgb(206, 151, 62);
+  font-size: 15px;
+  color: black;
 `
 
 const StyleEntry = styled.img`
- cursor: pointer;
+  cursor: pointer;
   border-radius: 30px;
   border: solid 0.5px #333;
   object-fit: cover;
@@ -79,7 +79,7 @@ const Price = styled.h2`
     `
     }
   }}
-`
+`;
 
 const Button = styled.button`
   background: transparent;
@@ -88,6 +88,13 @@ const Button = styled.button`
   color: #256D85;
   padding: 10px 10px;
   margin: 5px 7px;
+
+  &:hover {
+    border: none;
+    transition: ease-in-out 0.5s;
+    background-color: black;
+    color: white;
+  }
 
   ${props =>
     props.primary &&
@@ -98,12 +105,16 @@ const Button = styled.button`
 `
 const Reviews = styled.a`
   margin-left: 10px;
-  text-decoration: none;
+  text-decoration: underline;
   color: #256D85;
+  &:hover {
+    transition: all 0.5s;
+    background-color: black;
+    color: white;
+  }
 `
 
 /* --------------------  ProductInformation  --------------------*/
-
 function ProductInformation({
   product,
   currentStyle,

@@ -36,6 +36,7 @@ const App = () => {
         updateSelectedProduct(products.data[defaultIndex].id);
       })
     retrieveStorage();
+    getCart();
   }, []);
 
 
@@ -194,6 +195,11 @@ const App = () => {
     setOutfits([...updatedList])
   }
 
+  async function getCart() {
+    const request = await Parse.getAll('cart', undefined);
+    setCart(request.data);
+  }
+
   return (
     <AppContext.Provider value={{
       selectedProduct,
@@ -214,7 +220,7 @@ const App = () => {
             </div>
             <div className="toprightHeader">
               <div className="searchbar"><input className="search" placeholder="Search"></input><GoSearch className="searchIcon" /></div>
-              <div className="shoppingBag"><BsBag /></div>
+              <div className="shoppingBag"><BsBag /></div>{cart && <div className='cart'>{cart.length}</div>}
             </div>
           </div>
           <div className="main">
