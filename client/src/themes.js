@@ -11,6 +11,7 @@ export const lightTheme = {
   productBorderColor: '1px solid black',
   productImgBorder: '',
   productDescBorder: '1px solid burlywood',
+  burlyBorderBlack: '',
   starCardColor: '',
   defaultPrice: 'white',
   qandaSearchBg: 'white',
@@ -22,6 +23,14 @@ export const lightTheme = {
   qandaIconBorderBottom: '1px solid black',
   qandaPlaceholder: 'gray',
   showMoreBg: 'teal',
+  showMoreColor: 'white',
+  helpfulColor: 'teal',
+  addAnswercolor: 'teal',
+  reportColor: 'teal',
+  plusCardAreaBg: '#cccccc',
+  plusCardAreaColor: 'teal',
+  burlyAndTeal: 'teal',
+  gContainerImg: '',
 };
 
 export const darkTheme = {
@@ -35,16 +44,26 @@ export const darkTheme = {
   productBorderColor: '1px solid gray',
   productImgBorder: 'border-bottom: 1px solid gray',
   productDescBorder: '',
+  burlyBorderBlack: '1px solid burlywood',
   starCardColor: 'teal',
   defaultPrice: 'black',
   qandaSearchBg: '#48484a',
   qandaBorderLeft: '',
   qandaBorderTop: '',
-  qandaBorderBottom '',
+  qandaBorderBottom: '',
   qandaIconBorderLeft: '',
   qandaIconBorderTop: '',
-  qandaIconBorderBottom '',
+  qandaIconBorderBottom: '',
   qandaPlaceholder: 'white',
+  showMoreBg: 'burlywood',
+  showMoreColor: 'black',
+  helpfulColor: 'burlywood',
+  addAnswercolor: 'burlywood',
+  reportColor: 'burlywood',
+  plusCardAreaBg: '#1c1c1e',
+  plusCardAreaColor: 'white',
+  burlyAndTeal: 'burlywood',
+  gContainerImg: '1px solid burlywood',
 };
 
 export const GlobalStyles = createGlobalStyle`
@@ -420,8 +439,8 @@ a:visited {
   width: 180px;
   margin-right: 10px;
   border-radius: 5px;
-  background-color: burlywood;
-  color: black;
+  background-color: ${(props) => props.theme.showMoreBg};
+  color: ${(props) => props.theme.showMoreColor};
   border-style: none;
 }
 
@@ -429,7 +448,7 @@ a:visited {
   background-color: transparent;
   border: none;
   font-size: 14px;
-  color: burlywood;
+  color: ${(props) => props.theme.helpfulColor};
 }
 
 .helpful:hover, .add-answer:hover, .report:hover{
@@ -439,13 +458,13 @@ a:visited {
 .add-answer {
   background-color: transparent;
   border:none;
-  color: burlywood;
+  color: ${(props) => props.theme.addAnswercolor};
 }
 
 .report {
   background-color: transparent;
   border: none;
-  color: burlywood;
+  color: ${(props) => props.theme.reportColor};
 }
 
 
@@ -454,8 +473,8 @@ a:visited {
 */
 
 .plusCardArea {
-  background-color: #1c1c1e;
-  color: ${(props) => props.theme.fontColor};
+  background-color: ${(props) => props.theme.plusCardAreaBg};
+  color: ${(props) => props.theme.plusCardAreaColor};
   height: 300px;
   width: 255px;
   position: relative;
@@ -463,7 +482,7 @@ a:visited {
 }
 
 .plusCardArea:hover {
-  background-color: burlywood;
+  background-color: ${(props) => props.theme.burlyAndTeal};
   color: black;
   height: 300px;
   width: 255px;
@@ -485,6 +504,7 @@ a:visited {
   align-items: center;
   justify-content: center;
   height: 100px;
+  border-top: ${(props) => props.theme.productDescBorder};
 }
 
 .outfits {
@@ -515,7 +535,7 @@ a:visited {
 .modal-main {
   position:fixed;
   background: #1c1c1e;
-  color: ${(props) => props.theme.fontColor};
+  color: white;
   width: 770px;
   height: auto;
   top:50%;
@@ -616,7 +636,7 @@ a:visited {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: #2c2c2f;
+  background-color: ${(props) => props.theme.mainBColor};
   margin-top: 50px;
 }
 
@@ -648,7 +668,7 @@ a:visited {
   width: 500px;
   height: 500px;
   object-fit: cover;
-  border: 1px solid burlywood;
+  border: ${(props) => props.theme.burlyBorderBlack};
 }
 
 .pv-active {
@@ -669,7 +689,7 @@ a:visited {
 }
 
 .g-container img {
-  border: 1px solid burlywood;
+  border: ${(props) => props.theme.gContainerImg};
 }
 
 .g-entry {
@@ -727,7 +747,7 @@ a:visited {
   height: 50px;
   width: 50px;
   margin: 5px;
-  background-color: burlywood;
+  background-color: ${(props) => props.theme.burlyAndTeal};
 }
 
 .style-container {
@@ -738,7 +758,7 @@ a:visited {
 }
 
 .style-container img {
-  border: 1px solid burlywood;
+  border: ${(props) => props.theme.burlyBorderBlack};
 }
 
 .add-container {
@@ -748,7 +768,7 @@ a:visited {
 .add-container > button {
   padding: 10px 10px;
   margin: 5px 7px;
-  background-color: burlywood;
+  background-color: ${(props) => props.theme.burlyAndTeal};
   color: black;
   border-style: none;
   border-radius: 6px;
