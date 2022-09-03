@@ -808,7 +808,7 @@ a:visited {
   flex-direction: row;
   cursor: pointer;
   font-size: 24px;
-  color: burlywood;
+  color: ${(props) => props.theme.burlyAndTeal};
 }
 
 .social > button {
@@ -1372,7 +1372,7 @@ button:hover {
 .reviewExpandButton {
   border-radius: 5px;
   height: 30px;
-  background-color: burlywood;
+  background-color: ${(props) => props.theme.burlyAndTeal};
   border-style: none;
 }
 
