@@ -13,6 +13,15 @@ export const lightTheme = {
   productDescBorder: '1px solid burlywood',
   starCardColor: '',
   defaultPrice: 'white',
+  qandaSearchBg: 'white',
+  qandaBorderLeft: '1px solid black',
+  qandaBorderTop: '1px solid black',
+  qandaBorderBottom: '1px solid black',
+  qandaIconBorderLeft: '1px solid black',
+  qandaIconBorderTop: '1px solid black',
+  qandaIconBorderBottom: '1px solid black',
+  qandaPlaceholder: 'gray',
+  showMoreBg: 'teal',
 };
 
 export const darkTheme = {
@@ -28,6 +37,14 @@ export const darkTheme = {
   productDescBorder: '',
   starCardColor: 'teal',
   defaultPrice: 'black',
+  qandaSearchBg: '#48484a',
+  qandaBorderLeft: '',
+  qandaBorderTop: '',
+  qandaBorderBottom '',
+  qandaIconBorderLeft: '',
+  qandaIconBorderTop: '',
+  qandaIconBorderBottom '',
+  qandaPlaceholder: 'white',
 };
 
 export const GlobalStyles = createGlobalStyle`
@@ -246,7 +263,7 @@ a:visited {
 
 .defaultPrice {
   text-decoration: line-through;
-  color: ${(props) => props.theme.defaultPrice};;
+  color: ${(props) => props.theme.defaultPrice};
 }
 
 .cardLoader {
@@ -296,7 +313,7 @@ a:visited {
 
 .qanda-search {
   display: inline-flex;
-  border: 1px solid white;;
+  border: 1px solid white;
   width: 1298px;
   height: 50px;
   margin-top: 5px;
@@ -308,12 +325,15 @@ a:visited {
   outline: none;
   width: 1300px;
   height: 50px;
-  background-color: #48484a;
+  background-color: ${(props) => props.theme.qandaSearchBg};
   align-items: center;
   caret-color: white;
   padding-left: 10px;
   color: white;
   font-size: 16px;
+  border-left: ${(props) => props.theme.qandaBorderLeft};
+  border-top: ${(props) => props.theme.qandaBorderTop};
+  border-bottom: ${(props) => props.theme.qandaBorderBottom};
 }
 
 .qanda-search-icon {
@@ -323,12 +343,15 @@ a:visited {
   color: white;
   font-size: 30px;
   align-items: center;
+  border-left: ${(props) => props.theme.qandaIconBorderLeft};
+  border-top: ${(props) => props.theme.qandaIconBorderTop};
+  border-bottom: ${(props) => props.theme.qandaBorderBottom};
 }
 
 .qanda-search-input::placeholder {
   display: flex;
   font-size: 16px;
-  color: ${(props) => props.theme.fontColor};
+  color: ${(props) => props.theme.qandaPlaceholder};
   align-items: center;
 }
 
