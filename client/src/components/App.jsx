@@ -13,6 +13,7 @@ import QandA from './QandA/QandA.jsx';
 import { GoSearch } from 'react-icons/go';
 import { AppContext } from './AppContext.js';
 import styled, { ThemeProvider } from "styled-components";
+import { MdLightMode, MdDarkMode } from 'react-icons/md';
 import { lightTheme, darkTheme, GlobalStyles } from '../themes.js';
 
 const StyledApp = styled.div`
@@ -36,6 +37,7 @@ const App = () => {
 
   const themeToggler = () => {
     theme === 'light' ? setTheme('dark') : setTheme('light');
+    theme === 'light' ? localStorage.setItem('theme', 'dark') : localStorage.setItem('theme', 'light'); // to remember the last theme used by the user
   }
 
   useEffect(() => {
@@ -140,7 +142,8 @@ const App = () => {
         storedOutfits.push(JSON.parse(storage.getItem(key)))
       }
     }
-
+    let lastTheme = storage.getItem('theme');
+    setTheme(lastTheme);
     setOutfits(storedOutfits);
   }
 
@@ -232,7 +235,17 @@ const App = () => {
             </label>
           </div> */}
             <div className="header">
-              <button onClick={() => themeToggler()}>Change Theme</button>
+              {theme === 'light' ?
+                <div className='theme-toggler' onClick={themeToggler}>
+                  <MdLightMode />
+                  Theme
+                </div>
+                :
+                <div className='theme-toggler' onClick={themeToggler}>
+                  <MdDarkMode />
+                  Theme
+                </div>
+              }
               <div className="logoheader">
                 <div className="logotext"><h1>Odin</h1></div>
                 <div className="logo"><GiTriquetra /></div>

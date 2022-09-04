@@ -31,6 +31,7 @@ export const lightTheme = {
   plusCardAreaColor: 'teal',
   burlyAndTeal: 'teal',
   gContainerImg: '',
+  togglerBg: 'burlywood',
 };
 
 export const darkTheme = {
@@ -64,12 +65,13 @@ export const darkTheme = {
   plusCardAreaColor: 'white',
   burlyAndTeal: 'burlywood',
   gContainerImg: '1px solid burlywood',
+  togglerBg: '#858585',
 };
 
 export const GlobalStyles = createGlobalStyle`
 
 /*
-  MAIN DARK
+  BOTH MODES
 */
 
 body {
@@ -99,7 +101,23 @@ body {
   width: 1420px;
   background-color: ${(props) => props.theme.headerBColor};
   color: ${(props) => props.theme.fontColor};
-  border-bottom: 1px solid burlywood;;
+  border-bottom: 1px solid burlywood;
+}
+
+.theme-toggler {
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 20px;
+  transition: ease-in-out 0.5s;
+}
+.theme-toggler > svg {
+  margin-right: 10px;
+}
+
+.theme-toggler:hover {
+  border-radius: 5px;
+  padding: 5px;
+  background-color: ${(props) => props.theme.togglerBg};
 }
 
 a:visited {
