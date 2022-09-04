@@ -33,7 +33,7 @@ const App = () => {
   const [interactions, setInteractions] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
 
   const themeToggler = () => {
     theme === 'light' ? setTheme('dark') : setTheme('light');
@@ -167,7 +167,6 @@ const App = () => {
     }
   }
 
-  // Not tested yet, why are event not firing??
   const removeStorage = (e) => {
     localStorage.removeItem(e.target.id);
   };

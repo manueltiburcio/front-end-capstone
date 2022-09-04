@@ -51,6 +51,8 @@ function ImageGallery({
   currentStyle,
   arrowDown,
   arrowUp,
+  arrowLeft,
+  arrowRight,
   handleThumbClick,
   handleLeftClick,
   handleRightClick,
@@ -111,10 +113,14 @@ function ImageGallery({
           </div>
 
           <div className="pv-container">
-            <TiArrowLeftThick onClick={handleLeftClick} className='arrow' />
+            {arrowLeft &&
+              <TiArrowLeftThick onClick={handleLeftClick} className='arrow' />}
+
             {overlay && <PhotoOverlay clickedPhoto={clickedPhoto} onClick={handleOverlay} />}
             <PvImg className='pv-img' onClick={handlePhotoClick} src={currentPhoto || `https://via.placeholder.com/500`} alt={product.name}></PvImg>
-            <TiArrowRightThick onClick={handleRightClick} className='arrow' />
+
+            {arrowRight && <TiArrowRightThick onClick={handleRightClick} className='arrow' />}
+
             <TiArrowMaximise onClick={handlePhotoClick} className='expand' />
           </div>
 
