@@ -30,6 +30,7 @@ export const lightTheme = {
   plusCardAreaBg: '#cccccc',
   plusCardAreaColor: 'teal',
   burlyAndTeal: 'teal',
+  tealAndBurly: 'burlywood',
   gContainerImg: '',
   togglerBg: 'burlywood',
 };
@@ -64,27 +65,31 @@ export const darkTheme = {
   plusCardAreaBg: '#1c1c1e',
   plusCardAreaColor: 'white',
   burlyAndTeal: 'burlywood',
+  tealAndBurly: 'teal',
   gContainerImg: '1px solid burlywood',
   togglerBg: '#858585',
 };
 
 export const GlobalStyles = createGlobalStyle`
 
+
 /*
   BOTH MODES
 */
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 body {
-  width: 1420px;
   font-family: 'Noto Sans', sans-serif;
   font-size: small;
-  margin: auto;
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.fontColor};
 }
 
 .main {
-  width: 1440px;
   /* border: 1px dotted blue; */
   display: flex;
   flex-direction: column;
@@ -94,11 +99,10 @@ body {
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   padding: 10px;
   height: 100px;
-  width: 1420px;
   background-color: ${(props) => props.theme.headerBColor};
   color: ${(props) => props.theme.fontColor};
   border-bottom: 1px solid burlywood;
@@ -169,7 +173,12 @@ a:visited {
   border-style: none;
   padding-top: 5px;
   outline:none;
-  color: ${(props) => props.theme.headerBColor};
+  background-color: ${(props) => props.theme.headerBColor};
+}
+
+.search:focus {
+  border: 1px solid teal;
+  border-radius: 10px;
   color: ${(props) => props.theme.fontColor};
 }
 
@@ -186,6 +195,21 @@ a:visited {
   margin-top: 15px;
   font-size: 25px;
   padding: 5px;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  background-color: teal;
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
 }
 
 .star {
@@ -649,6 +673,7 @@ a:visited {
 
 /* ----------------- Image Gallery ----------------- */
 
+
 .image-container {
   display: flex;
   align-items: center;
@@ -757,6 +782,17 @@ a:visited {
   display: inline-flex;
 }
 
+.style-text {
+  font-size: 14px;
+  margin-right: 5px;
+  color: ${(props) => props.theme.fontColor};;
+  font-weight: 400;
+}
+
+.style {
+  font-weight: bolder;
+}
+
 .style-entry {
   cursor: pointer;
   border-radius: 30px;
@@ -783,18 +819,38 @@ a:visited {
   margin: 30px 0;
 }
 
-.add-container > button {
-  padding: 10px 10px;
+.add-cart {
+  padding: 10px 40px;
   margin: 5px 7px;
-  background-color: ${(props) => props.theme.burlyAndTeal};
-  color: black;
-  border-style: none;
-  border-radius: 6px;
-  padding: 10px;
+  background: #256D85;
+  border-radius: 4px;
+  border: none;
+  transition: ease-in-out 0.5s;
+  color: white;
 }
+
+.add-cart:hover {
+  border: 2px solid white;
+  transition: ease-in-out 0.5s;
+  background-color: black;
+}
+
+  /* &:hover
+    border: 2px solid white;
+    transition: ease-in-out 0.5s;
+    background-color: black; */
 
 .add-container :hover {
   cursor: pointer;
+}
+
+.select {
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid #256D85;
+  color: ${(props) => props.theme.tealAndBurly};
+  padding: 10px 20px;
+  margin: 5px 7px;
 }
 
 
