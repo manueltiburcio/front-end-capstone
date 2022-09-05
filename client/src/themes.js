@@ -33,6 +33,8 @@ export const lightTheme = {
   tealAndBurly: 'burlywood',
   gContainerImg: '',
   togglerBg: 'burlywood',
+  selectColor: 'black',
+  selectBorder: '2px solid burlywood',
 };
 
 export const darkTheme = {
@@ -68,6 +70,8 @@ export const darkTheme = {
   tealAndBurly: 'teal',
   gContainerImg: '1px solid burlywood',
   togglerBg: '#858585',
+  selectColor: 'teal',
+  selectBorder: '2px solid #256D85',
 };
 
 export const GlobalStyles = createGlobalStyle`
@@ -753,6 +757,7 @@ a:visited {
   cursor: pointer;
   font-size: 25px;
   padding: 5px;
+  transition: all .5s ease;
 }
 
 .expand {
@@ -789,6 +794,19 @@ a:visited {
   font-weight: 400;
 }
 
+.price {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.price-line {
+  text-decoration: line-through;
+}
+
+.price-sale {
+  color: red;
+}
+
 .style {
   font-weight: bolder;
 }
@@ -822,33 +840,24 @@ a:visited {
 .add-cart {
   padding: 10px 40px;
   margin: 5px 7px;
-  background: #256D85;
+  background:  ${(props) => props.theme.tealAndBurly};
   border-radius: 4px;
   border: none;
   transition: ease-in-out 0.5s;
-  color: white;
+  color: ${(props) => props.theme.fontColor};
 }
 
 .add-cart:hover {
-  border: 2px solid white;
   transition: ease-in-out 0.5s;
   background-color: black;
-}
-
-  /* &:hover
-    border: 2px solid white;
-    transition: ease-in-out 0.5s;
-    background-color: black; */
-
-.add-container :hover {
-  cursor: pointer;
+  color: ${(props) => props.theme.fontColor};
 }
 
 .select {
   background: transparent;
   border-radius: 3px;
-  border: 2px solid #256D85;
-  color: ${(props) => props.theme.tealAndBurly};
+  border: ${(props) => props.theme.selectBorder};
+  color: ${(props) => props.theme.selectColor};
   padding: 10px 20px;
   margin: 5px 7px;
 }

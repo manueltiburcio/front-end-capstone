@@ -212,11 +212,11 @@ function ProductInformation({
           <h2>{product.name}</h2>
           {currentStyle.sale_price !== null ?
             <div>
-              <Price primary>${currentStyle.original_price}</Price>
-              <Price secondary>${currentStyle.sale_price}</Price>
+              <h2 className='price price-line'>${currentStyle.original_price}</h2>
+              <h2 className='price price-sale'>${currentStyle.sale_price}</h2>
             </div>
 
-            : <Price>${product.default_price}</Price>}
+            : <h2 className='price'>${product.default_price}</h2>}
 
           <div>
             <div className='style-title'>
@@ -264,12 +264,12 @@ function ProductInformation({
             </select>
 
             <select className='select' onChange={handleQty}>
-              {qty ? <Button as='option'>1</Button> : <Button as='option' value="-">-</Button>}
+              {qty ? <option className='option'>1</option> : <option className='option' value="-">-</option>}
               {qty && renderQty(qty)}
             </select>
 
             <button className='add-cart' onClick={(e) => { handleLocalSave(e); handleAddToCart(e); }}>ADD TO CART</button>
-            <Button onClick={handleLocalSave}><TiStarFullOutline /></Button>
+            <button className='select' onClick={handleLocalSave}><TiStarFullOutline /></button>
           </div>
 
         </div>
