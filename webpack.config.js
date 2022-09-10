@@ -21,6 +21,13 @@ module.exports = {
         }
       },
       {
+        test: /\.mp3$/,
+        loader: 'file-loader',
+        options: {
+            name: '[path][name].[ext]'
+        }
+      },
+      {
         test: /\.css$/,
         use: [
           'style-loader',
@@ -29,6 +36,12 @@ module.exports = {
       },
     ]
   },
+  // loaders: [
+  //   {exclude: ['node_modules'], loader: 'babel', test: /\.jsx?$/},
+  //   {loader: 'style-loader!css-loader', test: /\.css$/},
+  //   {loader: 'url-loader', test: /\.gif$/},
+  //   {loader: 'file-loader', test: /\.(ttf|eot|svg)$/},
+  // ],
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "client/src", "index.html"),

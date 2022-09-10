@@ -4,7 +4,7 @@ import Parse from '../../parse.js';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-const OutfitCard = ({ product_id, removeApp, styleId, removeOutfit, starRender }) => {
+const OutfitCard = ({ product_id, removeApp, styleId, removeOutfit, starRender, carousel, left, right, placement }) => {
   const [productInfo, setProductInfo] = useState();
   const [productStyles, setProductStyles] = useState();
   const [stars, setStars] = useState(0);
@@ -12,51 +12,37 @@ const OutfitCard = ({ product_id, removeApp, styleId, removeOutfit, starRender }
   const [starHover, setStarHover] = useState(false);
   const [styleIndex, setStyleIndex] = useState(0);
 
-  // On load, get all data to be used on cards and render
   useEffect(() => {
-    Parse.getAll('products', `/${product_id}/`)
-    .then((productData) => {
-      setProductInfo(productData.data)
+    Promise.all([
+      Parse.getAll('products', `/${product_id}/`),
+      Parse.getAll('products', `/${product_id}/styles`),
+      Parse.getAll('reviews', `?product_id=${product_id}`)
+    ])
+    .then((response) => {
+      setProductInfo(response[0].data);
+      setProductStyles(response[1].data.results);
+      setStars(getAverageStars(response[2].data.results));
+      setProductLoad(true);
     })
-    .then((data) => {
-      Parse.getAll('products', `/${product_id}/styles`)
-      .then((stylesData) => {
-        setProductStyles(stylesData.data.results)
-      })
-      .then((data) => {
-        Parse.getAll('reviews', `?product_id=${product_id}`)
-        .then((reviewsData) => {
-          setStars(getAverage(reviewsData.data.results))
-        })
-        .then((data) => {
-          setProductLoad(true);
-        })
-        .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err))
-    })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log(err));
   }, []);
 
-  // Remove outfit from outfits event handler, calls from App
   const handleClickRemove = () => {
     removeApp(productInfo.id);
     removeOutfit(productInfo.id);
   }
 
-  // Function which takes in array of reviews for product, parses into a rating
-  const getAverage = (reviewsArray) => {
+  const getAverageStars = (reviewsArray) => {
     let ratings = reviewsArray.map(review => review.rating);
     let starRating = (ratings.reduce((total, rating) => total += rating, 0)/(ratings.length));
     return starRating
   }
 
   let renderAvgStars = () => {
-    return starRender(stars).map((star => star))
+    return starRender(stars);
   };
 
-  // Function to find index of selected style for photos
-  const findIndex = (id) => {
+  const findStyleIndex = (id) => {
     let index = productStyles.map(style => style.style_id).indexOf(id);
     if (index >= 0) {
       return index;
@@ -64,13 +50,20 @@ const OutfitCard = ({ product_id, removeApp, styleId, removeOutfit, starRender }
     return 0;
   }
 
+  const renderMask = () => {
+    if (right.length >= 1 && placement === 2) {
+      return {WebkitMaskImage: `-webkit-gradient(linear, right center, center center,
+        from(rgba(0,0,0,0.2)), to(rgba(0,0,0,1)))`};
+    }
+  };
+
   return (
     <div>
       {
         productLoad ?
-          <div className = 'productCard'>
+          <div style={renderMask()} className = 'productCard'>
             <div className = 'productCardImg'>
-              <img className = 'productImages' src={productStyles[findIndex(styleId)].photos[0].thumbnail_url || `https://via.placeholder.com/150`}/>
+              <img className = 'productImages' src={productStyles[findStyleIndex(styleId)].photos[0].thumbnail_url || `https://via.placeholder.com/150`} alt='Outfit Card Image'/>
               <div className = "actionCard" onClick={handleClickRemove}><AiFillCloseCircle color='crimson'/></div>
             </div>
             <div>

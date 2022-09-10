@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import Parse from '../../parse.js';
 import { OrbitSpinner } from 'react-epic-spinners';
@@ -6,21 +5,24 @@ import { AppContext } from '../AppContext.js';
 import ImageGallery from './ImageGallery.jsx';
 import StyleInformation from './StyleInformation.jsx';
 import ProductOverview from './ProductOverview.jsx';
-import { select } from 'underscore';
 import { FcCheckmark } from 'react-icons/fc';
 
-function Overview() {
+function Overview({ trackClick }) {
 
   const { selectedProduct,
     handleLocalClick,
     handleSelectedProduct,
     handleLocalSave,
+    metaData,
     localName,
     localId,
     renderStars,
     getTotalReviews,
-    getAverageRating } = useContext(AppContext);
-
+    getAverageRating,
+    getCart,
+    handleOutfitAdds,
+    outfits,
+  } = useContext(AppContext);
 
 
   const [product, setProduct] = useState();
@@ -33,11 +35,11 @@ function Overview() {
   const [arrowRight, setArrowRight] = useState(true);
   const [expand, setExpand] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [overlay, setOverlay] = useState(false);
 
 
   useEffect(() => {
     fetchData(selectedProduct);
-    getCart();
   }, [])
 
   async function fetchData(productId) {
@@ -50,10 +52,8 @@ function Overview() {
 
     set.styles = requestStyles.data.results;
 
-    params = `?product_id=${selectedProduct.id}`;
-    const requestMeta = await Parse.getAll(`reviews/meta/`, params);
-    set.averageRating = getAverageRating(requestMeta.data.ratings);
-    set.totalReviews = getTotalReviews(requestMeta.data.recommended);
+    set.averageRating = getAverageRating(metaData.ratings);
+    set.totalReviews = getTotalReviews(metaData.recommended);
 
     if (set.styles[0].photos[0].url !== null) {
       setCurrentPhoto(set.styles[0].photos[0].url);
@@ -67,14 +67,15 @@ function Overview() {
     if (requestStyles.data.results[0].photos.length > 6) {
       setArrowDown(true);
     }
+
+    if (requestStyles.data.results[0].photos.length < 2) {
+      setArrowRight(false);
+    }
   }
 
-  async function getCart() {
-    const request = await Parse.getAll('cart', undefined);
-  }
 
 
-  /* --------------------  style selection events  --------------------*/
+
   const handleProductClick = (e) => {
     e.preventDefault();
   }
@@ -89,10 +90,9 @@ function Overview() {
     setCurrentStyle(prod);
     setCurrentPhoto(prod.photos[0].url);
   }
-  /* --------------------  style selection events  --------------------*/
 
 
-  /* --------------------  gallery arrows events  --------------------*/
+
   const handleThumbClick = (e, item) => {
     let lastIndex = currentStyle.photos.length - 1;
     currentStyle.photos[0].url === e.target.id ? setArrowLeft(false) : setArrowLeft(true);
@@ -152,7 +152,7 @@ function Overview() {
     setArrowUp(true);
     setArrowDown(false);
     setStylesList(currentStyle.photos.slice(7, 14));
-    setCurrentPhoto(currentStyle.photos[5].url);
+    setCurrentPhoto(currentStyle.photos[7].url);
     let lastIndex = currentStyle.photos.length - 1;
     currentStyle.photos[lastIndex].url === currentStyle.photos[5].url ? setArrowRight(false) : setArrowRight(true);
     setArrowLeft(true);
@@ -162,25 +162,24 @@ function Overview() {
     setArrowDown(true);
     setArrowRight(true);
     setStylesList(currentStyle.photos.slice(0, 7));
-    setCurrentPhoto(currentStyle.photos[0].url);
+    setCurrentPhoto(currentStyle.photos[6].url);
   }
   const handleExpandedView = (e) => {
     e.preventDefault();
     setExpand(prevExpand => !prevExpand);
   }
-  /* --------------------  gallery arrows events  --------------------*/
-
 
 
   return (
     <React.Fragment>
-      <div className='main-container'>
+      <div className='main-container' onClick={trackClick}>
         <ImageGallery
           product={product}
           stylesList={stylesList}
           expand={expand}
           stylesList={stylesList}
           currentPhoto={currentPhoto}
+          setCurrentPhoto={setCurrentPhoto}
           currentStyle={currentStyle}
           arrowDown={arrowDown}
           arrowUp={arrowUp}
@@ -197,15 +196,19 @@ function Overview() {
         <StyleInformation
           product={product}
           currentStyle={currentStyle}
+          currentPhoto={currentPhoto}
           localName={localName}
           localId={localId}
           renderStars={renderStars}
           handleStyleClick={handleStyleClick}
           handleLocalClick={handleLocalClick}
           handleLocalSave={handleLocalSave}
+          getCart={getCart}
+          outfits={outfits}
+          outfitAdd={handleOutfitAdds}
         />
       </div>
-      <ProductOverview product={product} currentPhoto={currentPhoto} currentStyle={currentStyle} />
+      <ProductOverview product={product} currentPhoto={currentPhoto} currentStyle={currentStyle} trackClick={trackClick} />
     </React.Fragment>
   )
 

@@ -2,74 +2,57 @@ import React, { useState, useEffect, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import Parse from '../../parse.js';
 import { OrbitSpinner } from 'react-epic-spinners';
-import { TiStarFullOutline, TiStarOutline } from 'react-icons/ti';
-import Modal from './Compare.jsx';
+import { MdOutlineStar, MdOutlineStarOutline } from 'react-icons/md';
+import ComparisonModal from './Compare.jsx';
 
-const ProductCard = ({ product_id, addOutfit, select, current, avgStars, starRender }) => {
+const ProductCard = ({ product_id, addOutfit, select, current, avgStars, starRender, carousel, leftCarousel, rightCarousel, placement }) => {
   const [productInfo, setProductInfo] = useState({});
   const [productStyles, setProductStyles] = useState([]);
   const [stars, setStars] = useState(0);
   const [productLoad, setProductLoad] = useState(false);
   const [starHover, setStarHover] = useState(false);
-  const [showCompare, setShowCompare] = useState(false);
+  const [showCompare, setShowCompareModal] = useState(false);
 
   useEffect(() => {
-    Parse.getAll('products', `/${product_id}/`)
-      .then((productInfo) => {
-        setProductInfo(productInfo.data)
-      })
-      .then((data) => {
-        Parse.getAll('products', `/${product_id}/styles`)
-        .then((productStyles) => {
-          console.log(productStyles.data.results)
-          setProductStyles(productStyles.data.results)
-        })
-        .then((data) => {
-          Parse.getAll('reviews', `?product_id=${product_id}`)
-            .then((reviewsData) => {
-              setStars(getAverage(reviewsData.data.results))
-            })
-            .then((data) => {
-              setProductLoad(true);
-            })
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err))
-      })
-      .catch((err) => console.log(err))
-  }, [])
+    Promise.all([
+      Parse.getAll('products', `/${product_id}/`),
+      Parse.getAll('products', `/${product_id}/styles`),
+      Parse.getAll('reviews', `?product_id=${product_id}`)
+    ])
+    .then((response) => {
+      setProductInfo(response[0].data);
+      setProductStyles(response[1].data.results);
+      setStars(getAverageStars(response[2].data.results));
+      setProductLoad(true);
+    })
+    .catch((err) => console.log(err));
+  }, []);
 
-  // Function which takes in array of reviews for product, parses into a rating
-  const getAverage = (reviewsArray) => {
+  const getAverageStars = (reviewsArray) => {
     let ratings = reviewsArray.map(review => review.rating);
     let starRating = (ratings.reduce((total, rating) => total += rating, 0)/(ratings.length));
     return starRating
   }
 
   let renderAvgStars = () => {
-    return starRender(stars).map((star => star))
+    return starRender(stars);
   };
 
-  // hovering effect for comparison module
   const mouseHoverStar = () => {
     setStarHover(true);
   }
 
-  // hovering effect for comparison module
   const mouseExitStar = () => {
     setStarHover(false);
   }
 
-  // comparison module show/hide
-  const showModal = (event) => {
-    // stops overlapping clickable areas
+  const showCompareModal = (event) => {
     event.stopPropagation();
-    setShowCompare(true)
+    setShowCompareModal(true)
   };
 
-  // comparison module show/hide
-  const hideModal = () => {
-    setShowCompare(false)
+  const hideCompareModal = () => {
+    setShowCompareModal(false)
   };
 
   const handleImageClick = (event) => {
@@ -77,19 +60,27 @@ const ProductCard = ({ product_id, addOutfit, select, current, avgStars, starRen
     select(productInfo.id)
   }
 
+  const renderMask = () => {
+    if (leftCarousel.length >= 1 && placement === 0) {
+      return {WebkitMaskImage: `-webkit-gradient(linear, left center, center center,
+        from(rgba(0,0,0,0.2)), to(rgba(0,0,0,1)))`};
+    }
+
+    if (rightCarousel.length >= 1 && placement === 3) {
+      return {WebkitMaskImage: `-webkit-gradient(linear, right center, center center,
+        from(rgba(0,0,0,0.2)), to(rgba(0,0,0,1)))`};
+    }
+  };
+
   return (
     <div>
-      {/*Comparison Modal Condtionally Rendered Upon Click*/}
-      {showCompare ? <Modal show={showCompare} handleClose={hideModal} clicked={productInfo} current={current}></Modal> : null}
-      {/*Related Section Condtionally Rendered Upon Initialization*/}
+      {showCompare ? <ComparisonModal show={showCompare} handleClose={hideCompareModal} clicked={productInfo} current={current}></ComparisonModal> : null}
       {productLoad ?
-        <div className='productCard'>
+        <div style={renderMask()} className='productCard'>
           <div className='productCardImg' onClick={(event) =>{handleImageClick(event)}}>
-            <img className='productImages' src={productStyles[0].photos[0].thumbnail_url || `https://via.placeholder.com/150`}/>
-            <div className='starCard' onMouseEnter={mouseHoverStar} onMouseLeave={mouseExitStar} onClick={(event) => {showModal(event)}}>
-              { /* Show interaction with action button to show comparison modal */
-                starHover ? <TiStarFullOutline/> : <TiStarOutline />
-              }
+            <img className='productImages' src={productStyles[0].photos[0].thumbnail_url || `https://via.placeholder.com/150`} alt='Product Card Image'/>
+            <div className='starCard' onMouseEnter={mouseHoverStar} onMouseLeave={mouseExitStar} onClick={(event) => {showCompareModal(event)}}>
+              { starHover ? <MdOutlineStar/> : <MdOutlineStarOutline /> }
             </div>
           </div>
           <div>
@@ -97,7 +88,7 @@ const ProductCard = ({ product_id, addOutfit, select, current, avgStars, starRen
               <div className='cardCat'>{productInfo.category ? productInfo.category.toUpperCase() : productInfo.category}</div>
               <div className='cardName'><strong>{productInfo.name}</strong></div>
               <div className='cardPrice'>
-                { /* Card Pricing Conditional - if sale price exists, render it, else render original price */
+                {
                   productStyles[productStyles.length-1].sale_price ?
                   <div className='salePrice'>
                     ${productStyles[productStyles.length-1].sale_price} <div className='defaultPrice'>${productStyles[productStyles.length-1].original_price}</div>

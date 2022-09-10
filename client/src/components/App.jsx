@@ -1,26 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
+import styled, { ThemeProvider } from "styled-components";
+import moment from 'moment';
+import StarRatings from 'react-star-ratings';
 import Parse from '../parse.js';
-import axios from 'axios';
+import ClickTracker from './ClickTracker.jsx';
+import Header from './Header.jsx';
+import Overview from './ProductDetail/Overview.jsx';
 import Related from './RelatedAndComp/Related.jsx';
 import Outfits from './RelatedAndComp/Outfits.jsx';
-import Overview from './ProductDetail/Overview.jsx';
+import QandA from './QandA/QandA.jsx';
 import Reviews from './Reviews/Reviews.jsx';
+import FourOhFour from './404.jsx';
 import { TiStarFullOutline, TiStarHalfOutline, TiStarOutline } from 'react-icons/ti';
 import { GiTriquetra } from 'react-icons/gi'
 import { OrbitSpinner } from 'react-epic-spinners';
 import { BsSearch, BsBag } from 'react-icons/bs'
-import QandA from './QandA/QandA.jsx';
 import { GoSearch } from 'react-icons/go';
-import { AppContext } from './AppContext.js';
-import styled, { ThemeProvider } from "styled-components";
 import { MdLightMode, MdDarkMode } from 'react-icons/md';
+import { AppContext } from './AppContext.js';
 import { lightTheme, darkTheme, GlobalStyles } from '../themes.js';
 
 const StyledApp = styled.div`
-  color: ${(props) => props.theme.fontColor};
 `;
 
 const App = () => {
+
   const [outfits, setOutfits] = useState([]);
   const [styles, setStyles] = useState([]);
   const [localName, setLocalName] = useState('No Style Selected');
@@ -34,43 +38,62 @@ const App = () => {
   const [selectedProduct, setSelectedProduct] = useState({});
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState('light');
+  const [crashed, setCrashed] = useState(false);
 
   const themeToggler = () => {
     theme === 'light' ? setTheme('dark') : setTheme('light');
-    theme === 'light' ? localStorage.setItem('theme', 'dark') : localStorage.setItem('theme', 'light'); // to remember the last theme used by the user
+    theme === 'light' ? localStorage.setItem('theme', 'dark') : localStorage.setItem('theme', 'light');
   }
 
   useEffect(() => {
+    if (!localStorage.getItem('helpfulQuestions')) {
+      localStorage.setItem('helpfulQuestions', JSON.stringify({}));
+    }
+
+    if (!localStorage.getItem('helpfulAnswers')) {
+      localStorage.setItem('helpfulAnswers', JSON.stringify({}));
+    }
+
+    if (!localStorage.getItem('helpfulReviews')) {
+      localStorage.setItem('helpfulReviews', JSON.stringify({}));
+    }
+    if (!localStorage.getItem('searchStars')) {
+      localStorage.setItem('searchStars', JSON.stringify({ 1: false, 2: false, 3: false, 4: false, 5: false }));
+    }
+    if (!localStorage.getItem('sort')) {
+      localStorage.setItem('sort', 'relevant');
+    }
+
+    if (!localStorage.getItem('theme')) {
+      localStorage.setItem('theme', 'light');
+    }
+
     Parse.getAll(`products/`)
       .then((products) => {
-        let defaultIndex = Math.floor(Math.random() * products.data.length);
-        updateSelectedProduct(products.data[defaultIndex].id);
+        updateSelectedProduct(products.data[0].id);
       })
+      .catch((err) => {
+        console.log(err);
+        return setCrashed(true);
+      });
     retrieveStorage();
     getCart();
   }, []);
 
-
-  // pending push info to array, save in localStorage?
-  // window.onclick = e => {
-  //   //console.log(e.target); // element clicked
-  //   // use viewport instead of pageY
-
-  //   // if (e.pageY < 850) {
-  //   //   console.log('you are on the overview module');
-  //   // } else if (e.pageY < 1820) {
-  //   //   console.log('you are on the related products module');
-  //   // } else if (e.pageY < 2327) {
-  //   //   console.log('you are on the questions and answers module');
-  //   // } else {
-  //   //   console.log('you are on the reviews module');
-  //   // }
-
-  //   //console.log('time pending to format:', Date.now());
-  // }
+  const resetToFirstProduct = () => {
+    setLoading(false);
+    setCrashed(false);
+    Parse.getAll(`products/`)
+      .then((products) => {
+        updateSelectedProduct(products.data[0].id);
+      })
+      .catch((err) => {
+        console.log(err);
+        setCrashed(true);
+      });
+  };
 
   const getAverageRating = (ratings) => {
-    //Get average rating through gpa style math
     let ratingValues = Object.values(ratings);
     let totalRatings = ratingValues.reduce((prev, cur) => prev + parseInt(cur), 0);
     let ratingStrengths = ratingValues.map((rating, index) => rating * (index + 1));
@@ -78,15 +101,13 @@ const App = () => {
     return averageRatingTotal.toFixed(1);
   };
 
-  // put in array of products reviews (*.data.results)
   const getAverage = (reviewsArray) => {
     let ratings = reviewsArray.map(review => review.rating);
     let starRating = (ratings.reduce((total, rating) => total += rating, 0) / (ratings.length));
-    return starRating
-  }
+    return starRating;
+  };
 
   const getTotalReviews = (recommended) => {
-    //Get total amount of reviews by adding yes + no recommendations
     let recommendValues = Object.values(recommended);
     let totalRecommended = recommendValues.reduce((prev, cur) => prev + parseInt(cur), 0);
     return totalRecommended;
@@ -96,9 +117,7 @@ const App = () => {
     setLoading(false);
     updateSelectedProduct(product_id);
   };
-  // IF YOU WANT TO UPDATE SELECTED PRODUCT, USE ^ unloadComponents ^
-  // DO NOT CALL updateSelectedProduct DIRECTLY
-  //   IT WON'T REFRESH THE WIDGITS
+
   const updateSelectedProduct = (product_id) => {
     let params = `?product_id=${product_id}`;
     Parse.getAll(`products/`, `${product_id}`)
@@ -112,26 +131,13 @@ const App = () => {
         setTotalReviews(getTotalReviews(meta.data.recommended));
         setLoading(true);
       })
-      .then(() => {
-        //Consider refactoring these two functions to only have to update state once (preferably with the this.setState already here)
-        //this.retrieveStorage();
-        // retrieveStyles();
-      })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        return setCrashed(true);
+      });
   }
 
-  // const retrieveStyles = () => {
-  //   let state = {};
-  //   let params = `${selectedProduct.id}/styles`;
-
-  //   Parse.getAll(`products/`, params)
-  //   .then((styles) => {
-  //     setStyles(styles.data.results);
-  //   })
-  // }
-
   const handleSelectedProduct = (id) => {
-    //unloadComponents(id);
   }
 
   const retrieveStorage = () => {
@@ -172,19 +178,17 @@ const App = () => {
   };
 
   const renderStars = (rating) => {
-    let ratingCopy = rating;
-    let stars = [];
-    for (let i = 0; i < 5; i++) {
-      if (ratingCopy >= 0 && ratingCopy < 0.33 || ratingCopy < 0) {
-        stars.push(<TiStarOutline className='star' key={i} />);
-      } else if (ratingCopy >= 0.33 && ratingCopy <= 0.67) {
-        stars.push(<TiStarHalfOutline className='star' key={i} />);
-      } else {
-        stars.push(<TiStarFullOutline className='star' key={i} />);
-      }
-      ratingCopy--;
-    }
-    return stars;
+    let roundedRating = parseFloat((Math.round(parseFloat(rating) * 4) / 4).toFixed(2));
+    return (
+      <StarRatings
+        rating={roundedRating}
+        starRatedColor="teal"
+        numberOfStars={5}
+        starDimension='16px'
+        starSpacing='3px'
+        name='rating'
+      />
+    );
   };
 
   const handleOutfitAdds = (outfitData) => {
@@ -209,58 +213,45 @@ const App = () => {
     setCart(request.data);
   }
 
+  const OverviewTrack = ClickTracker(Overview, 'Product Detail')
+  const RelatedTrack = ClickTracker(Related, 'Related');
+  const OutfitsTrack = ClickTracker(Outfits, 'Outfits');
+  const ReviewsTrack = ClickTracker(Reviews, 'Reviews');
+  const QandATrack = ClickTracker(QandA, 'Questions & Answers');
+  const HeaderTrack = ClickTracker(Header, 'Header');
+
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <GlobalStyles />
       <AppContext.Provider value={{
         selectedProduct,
         localName,
+        outfits,
+        metaData,
         handleSelectedProduct,
         handleLocalClick,
         handleLocalSave,
         getAverageRating,
         getTotalReviews,
         renderStars,
+        getCart,
+        handleOutfitAdds,
       }}>
-
-
-        {loading ?
+        {loading &&
           <StyledApp>
-            {/* <div className="toggleTheme">
-            <div>Dark Mode:</div>
-            <label className="switch">
-              <input type="checkbox"></input>
-              <span className="slider round"></span>
-            </label>
-          </div> */}
-            <div className="header">
-              {theme === 'light' ?
-                <div className='theme-toggler' onClick={themeToggler}>
-                  <MdLightMode />
-                  Theme
-                </div>
-                :
-                <div className='theme-toggler' onClick={themeToggler}>
-                  <MdDarkMode />
-                  Theme
-                </div>
-              }
-              <div className="logoheader">
-                <div className="logotext"><h1>Odin</h1></div>
-                <div className="logo"><GiTriquetra /></div>
-              </div>
-              <div className="toprightHeader">
-                <div className="searchbar"><input className="search" placeholder="Search"></input><GoSearch className="searchIcon" /></div>
-                <div className="shoppingBag"><BsBag /></div>{cart && <div className='cart'>{cart.length}</div>}
-              </div>
-            </div>
+            <HeaderTrack
+              theme={theme}
+              cart={cart}
+              themeToggler={themeToggler}
+              onClick={resetToFirstProduct}
+            />
             <div className="main">
               <div>
-                <Overview
+                <OverviewTrack
                 />
               </div>
               <div className='relatedSection'>
-                <Related
+                <RelatedTrack
                   selectedProduct={selectedProduct}
                   addToOutfit={handleOutfitAdds}
                   selectStyle={unloadComponents}
@@ -268,7 +259,7 @@ const App = () => {
                   starRender={renderStars} />
               </div>
               <div className='outfitsSection'>
-                <Outfits
+                <OutfitsTrack
                   outfits={outfits}
                   current={selectedProduct}
                   outfitAdd={handleOutfitAdds}
@@ -278,24 +269,25 @@ const App = () => {
                   starRender={renderStars} />
               </div>
               <div className="questionsSection">
-                <QandA
+                <QandATrack
                   selectedProduct={selectedProduct}
                 />
               </div>
-              <div>
-                <Reviews
+              <div id='reviews'>
+                <ReviewsTrack
                   totalReviews={totalReviews}
+                  getTotalReviews={getTotalReviews}
                   averageRating={averageRating}
+                  getAverageRating={getAverageRating}
                   metaData={metaData}
                   renderStars={renderStars}
                   productName={selectedProduct.name}
-                  productId={selectedProduct.id}
-                />
+                  productId={selectedProduct.id}/>
               </div>
             </div>
-          </StyledApp>
-          : <StyledApp className="spinner"><OrbitSpinner color='teal' /></StyledApp>
-        }
+          </StyledApp>}
+          {(!loading && !crashed) && <StyledApp className="spinner"><OrbitSpinner color='teal' /></StyledApp>}
+          {crashed && <FourOhFour reset={resetToFirstProduct}/>}
       </AppContext.Provider>
     </ThemeProvider>
   )

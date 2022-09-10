@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
 export const lightTheme = {
-  body: "#fff",
+  body: "white",
   fontColor: "black",
   mainBColor: 'white',
   headerBColor: 'white',
@@ -9,18 +9,18 @@ export const lightTheme = {
   starColor: 'teal',
   productBgColor: 'rgba(28,28,30, .9)',
   productBorderColor: '1px solid black',
-  productImgBorder: '',
+  productImgBorder: '1px solid teal',
   productDescBorder: '1px solid burlywood',
-  burlyBorderBlack: '',
-  starCardColor: '',
+  burlyBorderBlack: '1px solid black',
+  starCardColor: 'teal',
   defaultPrice: 'white',
   qandaSearchBg: 'white',
-  qandaBorderLeft: '1px solid black',
-  qandaBorderTop: '1px solid black',
-  qandaBorderBottom: '1px solid black',
-  qandaIconBorderLeft: '1px solid black',
-  qandaIconBorderTop: '1px solid black',
-  qandaIconBorderBottom: '1px solid black',
+  qandaBorderLeft: '1px solid white',
+  qandaBorderTop: '1px solid white',
+  qandaBorderBottom: '1px solid white',
+  qandaIconBorderLeft: '1px solid white',
+  qandaIconBorderTop: '1px solid white',
+  qandaIconBorderBottom: '1px solid white',
   qandaPlaceholder: 'gray',
   showMoreBg: 'teal',
   showMoreColor: 'white',
@@ -28,13 +28,23 @@ export const lightTheme = {
   addAnswercolor: 'teal',
   reportColor: 'teal',
   plusCardAreaBg: '#cccccc',
-  plusCardAreaColor: 'teal',
+  plusCardAreaColor: 'black',
   burlyAndTeal: 'teal',
   tealAndBurly: 'burlywood',
-  gContainerImg: '',
+  gContainerImg: '1px solid teal',
   togglerBg: 'burlywood',
   selectColor: 'black',
   selectBorder: '2px solid burlywood',
+  buttonText: 'white',
+  linkColor: 'black',
+  modalCompareBg: 'white',
+  modalCompareText: 'black',
+  salePriceColor: 'red',
+  caretColor: 'black',
+  dropdownShadow: 'rgba(0,0,0,0.2)',
+  searchBarBG: 'white',
+  styleBorder: '3px solid teal',
+  priceColor: 'red',
 };
 
 export const darkTheme = {
@@ -72,19 +82,53 @@ export const darkTheme = {
   togglerBg: '#858585',
   selectColor: 'teal',
   selectBorder: '2px solid #256D85',
+  buttonText: 'black',
+  linkColor: 'white',
+  modalCompareBg: '#121212',
+  modalCompareText: 'white',
+  salePriceColor: '#FF5C5C',
+  caretColor: 'white',
+  dropdownShadow: 'rgba(0,0,0,0.3)',
+  searchBarBG: '#1c1c1e',
+  styleBorder: '3px solid burlywood',
+  priceColor: '#FF5C5C',
 };
 
 export const GlobalStyles = createGlobalStyle`
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: ${(props) => props.theme.mainBColor};
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: ${(props) => props.theme.fontColor};
+}
+
 
 
 /*
   BOTH MODES
 */
 
-html {
-  scroll-behavior: smooth;
+img{
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
+html {
+  scroll-behavior: smooth;
+  background-color: ${(props) => props.theme.htmlBackgroundColor};
+}
+
+a {
+  color: ${(props) => props.theme.linkColor};
+}
 
 body {
   font-family: 'Noto Sans', sans-serif;
@@ -97,6 +141,8 @@ body {
   /* border: 1px dotted blue; */
   display: flex;
   flex-direction: column;
+  width: 1400px;
+  margin: auto;
   background-color: ${(props) => props.theme.mainBColor};
   color: ${(props) => props.theme.fontColor};
 }
@@ -105,8 +151,11 @@ body {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   height: 100px;
+  width: 1400px;
+  margin: auto;
   background-color: ${(props) => props.theme.headerBColor};
   color: ${(props) => props.theme.fontColor};
   border-bottom: 1px solid burlywood;
@@ -114,12 +163,32 @@ body {
 
 .theme-toggler {
   cursor: pointer;
-  font-size: 20px;
-  margin-left: 20px;
+  font-size: 18px;
   transition: ease-in-out 0.5s;
+  padding: 5px;
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  opacity: .75
 }
+
+.themeswitch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 70px;
+  height: 10px;
+}
+
+.themetext {
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+
 .theme-toggler > svg {
   margin-right: 10px;
+  padding-top: 10px;
 }
 
 .theme-toggler:hover {
@@ -170,35 +239,49 @@ a:visited {
   color: ${(props) => props.theme.fontColor};
 }
 
+.logo:hover,
+.logotext:hover {
+  cursor: pointer;
+}
+
 .search {
   width: 500px;
-  margin-top: 5px;
   height: 30px;
   border-style: none;
-  padding-top: 5px;
-  outline:none;
-  background-color: ${(props) => props.theme.headerBColor};
+  outline: none;
+  background-color: ${(props) => props.theme.searchBarBG};
+  border-radius: 15px;
+  padding-left: 15px;
 }
 
 .search:focus {
-  border: 1px solid teal;
-  border-radius: 10px;
   color: ${(props) => props.theme.fontColor};
 }
 
 .searchbar {
+  display: flex;
+  align-items: center;
   border-bottom: ${(props) => props.theme.borderColor};
-  padding: 1px;
+  background-color: ${(props) => props.theme.searchBarBG};
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 20px;
+  margin-right: 20px;
 }
 
 .searchIcon {
-  font-size: 20px;
+  font-size: 18px;
+  padding-right: 15px;
+  border-radius: 15px;
+  background-color: ${(props) => props.theme.searchBarBG};
 }
 
 .shoppingBag {
   margin-top: 15px;
-  font-size: 25px;
+  font-size: 30px;
   padding: 5px;
+  padding-right: 13px;
+  position: relative;
 }
 
 .cart {
@@ -211,9 +294,13 @@ a:visited {
   background-color: teal;
   color: #fff;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   padding: 0;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  opacity: .95;
 }
 
 .star {
@@ -228,7 +315,7 @@ a:visited {
 .relatedSection, .outfitsSection {
   height: 500px;
   margin: auto;
-  width: 1340px;
+  width: 1330px;
   background-color: ${(props) => props.theme.mainBColor};
   padding-left: 70px;
 }
@@ -255,7 +342,7 @@ a:visited {
 */
 
 .productCard {
-  border: ${(props) => props.theme.productBorderColor};;
+  border: ${(props) => props.theme.productBorderColor};
   width: 255px;
   height: 400px;
   margin-left: 10px;
@@ -285,7 +372,7 @@ a:visited {
 .productCardDesc {
   padding-left: 10px;
   padding-top: 10px;
-  width: 255px;
+  width: 245px;
   height: 50px;
   color: white;
   border-top: ${(props) => props.theme.productDescBorder};
@@ -323,7 +410,7 @@ a:visited {
 }
 
 .salePrice {
-  color: red;
+  color: ${(props) => props.theme.salePriceColor};
 }
 
 .defaultPrice {
@@ -348,7 +435,7 @@ a:visited {
 */
 
 .questionsSection {
-  width: 100px;
+  width: 1300px;
   height: auto;
   margin-left: 50px;
 }
@@ -356,11 +443,11 @@ a:visited {
 .qanda {
   display: flex;
   flex-direction: column;
-  width: 1300px;
-  height: auto;
-  /* border: 2px solid black; */
-  border-bottom: 1px dashed white;
-  overflow-y: auto;
+  width: 1250px;
+  height: 900px;
+  border-bottom: 1px dashed burlywood;
+  border-top: 1px dashed burlywood;
+  overflow-y: hidden;
   padding: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -378,10 +465,11 @@ a:visited {
 
 .qanda-search {
   display: inline-flex;
-  border: 1px solid white;
-  width: 1298px;
+  border: 1px solid ${(props) => props.theme.caretColor};
+  width: 1248px;
   height: 50px;
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .qanda-search-input {
@@ -392,9 +480,9 @@ a:visited {
   height: 50px;
   background-color: ${(props) => props.theme.qandaSearchBg};
   align-items: center;
-  caret-color: white;
+  caret-color: ${(props) => props.theme.caretColor};
   padding-left: 10px;
-  color: white;
+  color: ${(props) => props.theme.qandaPlaceholder};
   font-size: 16px;
   border-left: ${(props) => props.theme.qandaBorderLeft};
   border-top: ${(props) => props.theme.qandaBorderTop};
@@ -403,9 +491,10 @@ a:visited {
 
 .qanda-search-icon {
   display: inline-flex;
+  height: auto;
   border: none;
-  background-color: #48484a;
-  color: white;
+  background-color: ${(props) => props.theme.qandaSearchBg};
+  color: ${(props) => props.theme.caretColor};
   font-size: 30px;
   align-items: center;
   border-left: ${(props) => props.theme.qandaIconBorderLeft};
@@ -423,22 +512,37 @@ a:visited {
 .question-list {
   display: flex;
   flex-direction: column;
-  width: 1300px;
+  width: 1250px;
   overflow-y: auto;
 }
 
 .question-list::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  width: 1px;
+}
+
+.question-list::-webkit-scrollbar-track {
+  background-color: ${(props) => props.theme.mainBColor};
+}
+
+.question-list::-webkit-scrollbar-thumb {
+  background-color: ${(props) => props.theme.fontColor};
+}
+
+.qandaButtons {
+  display: flex;
+  width: 1250px;
+  align-items: center;
+  border-top: 1px solid grey;
 }
 
 .question-body {
   display: flex;
-  width: 1400px;
-  height: auto;
+  width: 1250px;
+  height: 800px;
   flex-direction: column;
   justify-content: space-between;
   font-size: 16px;
+  overflow-y: auto;
 }
 
 .question-set {
@@ -469,6 +573,13 @@ a:visited {
   flex-direction: column;
   justify-content: space-between;
   margin: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.answer-bottom-border {
+  width: 50%;
+  // border-bottom: 1px dotted burlywood;
 }
 
 .no-answer {
@@ -476,9 +587,63 @@ a:visited {
   margin: 5px
 }
 
+.photoThumbnail {
+  display: inline-flex;
+  height: auto;
+  width: 20%;
+}
+
+.answer-photo {
+  display: inline-flex;
+  height: 100px;
+  margin: 5px 10px 5px 0;
+  // width: 20%;
+}
+
+.answer-photo:hover{
+  cursor: pointer;
+}
+
+input[type='file'] {
+  color: rgba(0,0,0,0)
+}
+
+.answerPhotoThumbnail {
+  height: 100px;
+  max-width: 19%;
+  margin: 5px;
+  margin-right: 10px;
+}
+
 /*
   BUTTONS
 */
+
+.showAnswersButton {
+  border-radius: 5px;
+  border-style: none;
+  height: 30px;
+  background-color: ${(props) => props.theme.tealAndBurly};
+  color: ${(props) => props.theme.fontColor};
+  border-radius: 6px;
+  border-style: none;
+  padding: 5px 10px;
+}
+
+.question-list-button {
+  height: 30px;
+  width: 150px;
+  border-radius: 5px;
+  border-style: none;
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border-style: none;
+  background-color: ${(props) => props.theme.tealAndBurly};
+  color: ${(props) => props.theme.fontColor};
+}
+
 .show-more-or-less {
   margin-top: 10px;
   height: 30px;
@@ -513,6 +678,124 @@ a:visited {
   color: ${(props) => props.theme.reportColor};
 }
 
+/*
+  PORTAL OVERLAY
+*/
+
+.portal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  opacity: 30%;
+  z-index: 10;
+}
+
+/*
+  Q&A MODAL
+*/
+
+.question-modal,
+.answer-modal {
+  position: fixed;
+  width: 30%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: 'rgba(0, 0, 0, .3)';
+  padding: 25px;
+  z-index: 11;
+}
+
+.question-form,
+.answer-form {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  border: 2px solid burlywood;
+  background-color: ${(props) => props.theme.mainBColor};
+  padding: 10px;
+  z-index: 11;
+}
+
+.question-form input,
+.answer-form input {
+  background-color: ${(props) => props.theme.tealAndBurly};
+  color: ${(props) => props.theme.fontColor};
+}
+
+.question-form input:hover,
+.answer-form input:hover {
+  cursor: pointer;
+}
+
+.answerInputPhotoSection,
+.questionInputPhotoSection {
+  display: flex;
+  flex-direction: row;
+  border: ${(props) => props.theme.burlyBorderBlack};
+  background-color: ${(props) => props.theme.mainBColor};
+}
+
+/*
+  QUESTION MODAL INPUTS
+*/
+
+textarea[name='user-question'],
+textarea[name='user-answer'] {
+  width: auto;
+  height: 100px;
+}
+
+textarea[name='nickname'],
+textarea[name='email'] {
+  width: auto;
+}
+
+input[type='submit'] {
+  height: 30px;
+  width: 90px;
+  margin-top: 20px;
+}
+
+.email-small {
+  padding-bottom: 18px;
+}
+
+.photoThumbnail {
+  display: inline-flex;
+  height: auto;
+  width: 20%;
+}
+
+input[type='file'] {
+  color: rgba(0,0,0,0)
+}
+
+/*
+  QUESTION MODAL HEADINGS
+*/
+
+.question-form h4,
+.answer-form h4 {
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+/*
+  WEB PAGE FUNCTIONS
+*/
 
 /*
   Outfits
@@ -550,6 +833,7 @@ a:visited {
   align-items: center;
   justify-content: center;
   height: 100px;
+  color: white;
   border-top: ${(props) => props.theme.productDescBorder};
 }
 
@@ -560,7 +844,6 @@ a:visited {
   position: relative;
   overflow: hidden;
   grid: auto / auto-flow max-content;
-  z-index: 1;
   padding-left: 20px;
 }
 
@@ -575,19 +858,20 @@ a:visited {
   width:100%;
   height: 100%;
   background: rgba(0, 0, 0, .15);
-  z-index: 2;
+  z-index: 99;
 }
 
 .modal-main {
   position:fixed;
-  background: #1c1c1e;
-  color: white;
+  background: ${(props) => props.theme.modalCompareBg};
+  color: ${(props) => props.theme.modalCompareText};
   width: 770px;
   height: auto;
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
-  border: 1px solid black;
+  border: ${(props) => props.theme.burlyBorderBlack};
+  z-index: 99;
 }
 
 .modalTable {
@@ -595,6 +879,7 @@ a:visited {
   height: 300px;
   padding: 10px;
   padding-bottom: 30px;
+  z-index: 99;
 }
 
 .modalData {
@@ -602,19 +887,23 @@ a:visited {
   height: 10px;
   text-align: center;
   padding: 3px;
+  z-index: 99;
 }
 
 .tableHead {
   width: 750px;
   text-align: center;
+  z-index: 99;
 }
 
 .display-block {
   display: block;
+  z-index: 99;
 }
 
 .display-none {
   display: none;
+  z-index: 99;
 }
 
 /*
@@ -631,7 +920,7 @@ a:visited {
   top:170px;
   left:1125px;
   font-size: 30px;
-  z-index: 14;
+  z-index: 2;
 }
 
 .rightArrow:hover, .leftArrow:hover {
@@ -643,7 +932,7 @@ a:visited {
   top: 170px;
   left: 0px;
   font-size: 30px;
-  z-index: 14;
+  z-index: 2;
 }
 
 /*
@@ -670,9 +959,11 @@ a:visited {
 
 .main-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   scroll-behavior: smooth
+  padding-top: 50px;
+  margin-top: 50px;
 }
 
 /* ----------------- Image Gallery ----------------- */
@@ -680,11 +971,10 @@ a:visited {
 
 .image-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   flex-direction: row;
   background-color: ${(props) => props.theme.mainBColor};
-  margin-top: 50px;
 }
 
 .overviewFeature {
@@ -698,7 +988,7 @@ a:visited {
   align-items: center;
   justify-content: center;
   transition: ease-in 0.5s ease;
-  margin: 10px;
+  margin: 0px 10px 0px 10px;
 }
 
 .pv-container-active {
@@ -730,7 +1020,7 @@ a:visited {
 
 .g-container {
   display: flex;
-  align-items: center;
+  align-items: space-between;
   justify-content: center;
   flex-direction: column;
 }
@@ -742,15 +1032,35 @@ a:visited {
 .g-entry {
   cursor: pointer;
   background-color: #fff;
-  width: 50px;
-  margin: 20px;
+  width: 40px;
+  margin-bottom: 2px;
   height: 50px;
   transition: all .5s ease;
+}
+
+.g-line {
+  height: 3px;
+  left: 10px;
+  margin-bottom: 20px;
+  background-color: ${(props) => props.theme.tealAndBurly};
+}
+.g-line-hidden {
+  visibility: hidden;
+  height: 3px;
+  left: 10px;
+  margin-bottom: 20px;
+  background-color: ${(props) => props.theme.tealAndBurly};
+}
+
+.g-entry:hover {
+  background: white;
+  opacity: .80;
 }
 
 .g-border {
   border-bottom: solid 5px burlywood;
 }
+
 
 .arrow {
   color: ${(props) => props.theme.fontColor};
@@ -760,6 +1070,181 @@ a:visited {
   transition: all .5s ease;
 }
 
+.arrow-hidden {
+  visibility: hidden;
+  color: ${(props) => props.theme.fontColor};
+  cursor: pointer;
+  font-size: 25px;
+  padding: 5px;
+}
+
+/* ----------------- Expaneded Section ----------------- */
+
+.slider-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.arrow-side {
+  display: inline-block;
+  color: white;
+  cursor: pointer;
+  font-size: 25px;
+  padding: 20px 10px;
+  transform: rotate(270deg);
+  transition: all .5s ease;
+}
+
+.slider-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+  }
+
+  .sliderImg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // width: 700px;
+    height: 800px;
+    // max-height: 70vh;
+    max-width: 700px;
+    //padding: 10px;
+    // max-width: unset !important;
+    background-color: ${(props) => props.theme.headerBColor};
+    border-radius: 10px;
+    background-position: center;
+    object-fit: scale-down;
+    border: ${(props) => props.theme.burlyBorderBlack};
+  }
+
+  .sliderImg:hover {
+    cursor: crosshair;
+  }
+
+
+.g-container-vertical {
+  display: flex;
+  align-items: space-between;
+  justify-content: center;
+  flex-direction: row;
+  position: fixed;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%);
+  font-size: 25px;
+  z-index: 4;
+  cursor: pointer;
+}
+
+.g-entry-v {
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin: 2px 10px;
+  transition: all .5s ease;
+  border-radius: 5px;
+  border: 3px solid transparent;
+}
+
+.g-entry-v-b {
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin: 2px 10px;
+  border-radius: 5px;
+  border: ${(props) => props.theme.styleBorder};
+}
+
+.g-line-v {
+  width: 60px;
+  height: 3px;
+  margin: 0 auto;
+  border: 3px solid transparent;
+}
+
+.left-arrow-v {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 29%;
+  font-size: 25px;
+  color: white;
+  z-index: 4;
+  cursor: pointer;
+  }
+
+.right-arrow-v {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 70%;
+  font-size: 25px;
+  color: white;
+  z-index: 4;
+  cursor: pointer;
+  }
+
+
+
+.dot-container {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  display: flex;
+  top: 92%;
+  left: 50%;
+  transform: translate(-50%);
+  color: gray;
+  z-index: 4;
+  }
+
+.dot {
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.dot-active {
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+}
+
+#modalCarousel {
+  width: 38%;
+  max-height: fit-content;
+}
+
+.mainImage {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+
+
+.mainImage:hover {
+  cursor: zoom-in;
+}
+
+.modalImage:hover {
+  cursor: crosshair;
+}
+
 .expand {
   color: ${(props) => props.theme.fontColor};
   cursor: pointer;
@@ -767,12 +1252,33 @@ a:visited {
   align-self: flex-start;
 }
 
+.expand-container {
+  width: 500px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+
 /* ----------------- Style Section ----------------- */
 
 .info-container {
   margin: 0 30px;
   width: 250px;
   scroll-behavior: smooth;
+}
+
+.style-category {
+  margin-left: 3px;
+}
+
+.star-ratings {
+  margin-right: 8px;
+}
+
+.reviewsInfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .star {
@@ -790,21 +1296,24 @@ a:visited {
 .style-text {
   font-size: 14px;
   margin-right: 5px;
-  color: ${(props) => props.theme.fontColor};;
+  color: ${(props) => props.theme.fontColor};
   font-weight: 400;
 }
 
 .price {
+  display: inline;
   font-size: 14px;
   font-weight: 400;
 }
 
 .price-line {
+  font-size: 10px;
   text-decoration: line-through;
 }
 
 .price-sale {
-  color: red;
+  margin-right: 10px;
+  color: ${(props) => props.theme.priceColor};
 }
 
 .style {
@@ -813,67 +1322,171 @@ a:visited {
 
 .style-entry {
   cursor: pointer;
-  border-radius: 30px;
-  border: solid 0.5px #333;
-  object-fit: cover;
+  box-sizing: border-box;
   height: 50px;
   width: 50px;
   margin: 5px;
+  border-radius: 30px;
+  object-fit: cover;
+  border: ${(props) => props.theme.burlyBorderBlack};
   background-color: ${(props) => props.theme.burlyAndTeal};
+  border: 1px solid burlywood;
 }
 
 .style-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
 }
-
-.style-container img {
-  border: ${(props) => props.theme.burlyBorderBlack};
+.style-container-active {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+}
+.style-entry-active {
+  position: block;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin: 5px;
+  border-radius: 30px;
+  height: 50px;
+  width: 50px;
+  border: ${(props) => props.theme.styleBorder};
+  object-fit: cover;
+  background-color: ${(props) => props.theme.burlyAndTeal};
+}
+.check-active {
+  color: ${(props) => props.theme.burlyAndTeal};;
+  position: absolute;
+  bottom: 42px;
+  left: 5px;
 }
 
 .add-container {
   margin: 30px 0;
 }
 
-.add-cart {
-  padding: 10px 40px;
+.out-of-stock {
+  font-size: 14px;
+  color: ${(props) => props.theme.fontColor};
+}
+.select-size-please {
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  color: ${(props) => props.theme.fontColor};
+}
+
+.select-size-please-hide {
+  visibility: hidden;
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  color: ${(props) => props.theme.fontColor};
+}
+
+.select {
+  background: #cccccc;
+  border: burlywood;
+  color: black;
+  padding: 10px 20px;
   margin: 5px 7px;
+}
+
+.select-size {
+  background: #cccccc;
+  border: burlywood;
+  color: black;
+  padding: 10px 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 20px;
+  margin-left: 7px;
+  width: 500px;
+}
+
+.select > svg {
+  font-size: 14px;
+  color: black;
+}
+
+.select-star {
+  background: burlywood;
+  color: black;
+}
+
+.select-size {
+  width: 70px;
+  height: 30px;
+}
+
+.add-cart {
+  // padding: 10px 30px;
+  // margin: 5px 7px;
+  height: 30px;
+  width: 175px;
   background:  ${(props) => props.theme.tealAndBurly};
-  border-radius: 4px;
+  // border-radius: 4px;
   border: none;
   transition: ease-in-out 0.5s;
   color: ${(props) => props.theme.fontColor};
+  margin-right: 5px;
 }
 
 .add-cart:hover {
   transition: ease-in-out 0.5s;
   background-color: black;
-  color: ${(props) => props.theme.fontColor};
+  color: white;
 }
 
-.select {
-  background: transparent;
-  border-radius: 3px;
-  border: ${(props) => props.theme.selectBorder};
-  color: ${(props) => props.theme.selectColor};
-  padding: 10px 20px;
-  margin: 5px 7px;
+.add-cart span {
+  margin: 0;
+}
+
+.select-size-dropdown {
+  padding: 0;
+  margin: 0;
+  height: 30px;
+  width: 150px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border: 1px solid ${(props) => props.theme.burlyBorderBlack};
+}
+
+.select-quantity {
+  padding: 0;
+  margin: 0;
+  height: 30px;
+  width: 55px;
+  margin-bottom: 5px;
+  border: 1px solid ${(props) => props.theme.burlyBorderBlack};
+}
+
+.select-star {
+  padding: 0 0 2px 0;
+  margin: 0;
+  height: 30px;
+  width: 30px;
+  background: ${(props) => props.theme.tealAndBurly};
+}
+
+.select-star svg {
+  margin: 0;
+  color: ${(props) => props.theme.fontColor};
 }
 
 
 /* ----------------- Product Overview ----------------- */
 .prodview-container {
   display: flex;
+  width: 700px;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  margin: 40px 400px;
+  margin: 40px auto;
 }
 
 .prodview-text {
-  width: 100%;
+  width: auto;
 }
 
 .prodview-line {
@@ -891,12 +1504,19 @@ a:visited {
   flex-direction: row;
   cursor: pointer;
   font-size: 24px;
+  padding-right: 45px;
   color: ${(props) => props.theme.burlyAndTeal};
 }
 
 .social > button {
   color: #94B49F;
   margin: 10px 25px;
+}
+
+.feature {
+  display: inline-block;
+  margin: 0 10px;
+  width: auto;
 }
 
 /*******************
@@ -906,14 +1526,11 @@ a:visited {
 .reviewMain {
   display: flex;
   flex-direction: row;
-  /* flex-wrap: wrap; */
-  justify-content: space-between;
-  width: 1400px;
+  justify-content: center;
+  width: 1000px;
   height: auto;
   padding: 50px;
-  /* background-color: pink; */
-  /* border: 2px solid black; */
-  /* overflow-y: auto; */
+  margin-left: 140px;
 }
 
 .reviewSideBar {
@@ -922,23 +1539,26 @@ a:visited {
   height: auto;
   width: 400px;
   margin-right: 30px;
-  padding: 20px 10px;
-  border-right: 1px solid white;
-  /* background-color: gray; */
-  /* border: 2px solid rgb(8, 88, 8); */
+  padding: 0 40px 20px 10px;
+  border-right: 1px solid burlywood;
 }
 
 .reviewList {
-  height: auto;
-  width: 900px;
-  /* border: 2px solid black; */
+  height: 800px;
+  width: 800px;
+  border-top: 1px dashed burlywood;
   overflow-y: auto;
 }
 
 .reviewList::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  /* background: transparent; */
+  width: 1px;
+}
+.reviewList::-webkit-scrollbar-track {
+  background-color: ${(props) => props.theme.mainBColor};
+}
+
+.reviewList::-webkit-scrollbar-thumb {
+  background-color: ${(props) => props.theme.fontColor};
 }
 
 /*******************
@@ -951,7 +1571,38 @@ a:visited {
 
 .averageRating {
   display: flex;
-  /* border: 1px solid gray; */
+  flex-direction: column;
+}
+
+.averageRating p{
+  margin: 0;
+}
+
+.averageRatingSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.averageRating h1 {
+  font-size: 36px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 5px;
+}
+
+.averageRating svg {
+  margin-top: 2px;
+  // padding-bottom: 15px;
+}
+
+.averageRating h1 {
+  font-size: 36px;
+}
+
+.averageRating svg {
+  margin-top: 2px;
+  // padding-bottom: 15px;
 }
 
 /*
@@ -967,9 +1618,8 @@ a:visited {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 400px;
+  width: 420px;
   height: 400px;
-  /* border: 1px solid gray; */
 }
 
 .reviewBarSectionOff,
@@ -979,30 +1629,26 @@ a:visited {
   flex-direction: row;
   width: inherit;
   align-items: center;
-  /* border: 1px solid rgb(65, 65, 65); */
+  // margin-left: 10px;
 }
 
 .reviewBarSectionOn {
   background-color: rgba(012, 012, 012, 0.274);
-  /* border: 5px solid teal; */
 }
 
 .reviewBarSectionOff:hover {
   cursor: pointer;
-  /* background-color: teal; */
-  /* transition: 0.3s; */
 }
 
 .reviewBarSectionOn:hover {
   cursor: pointer;
-  /* background-color: transparent; */
-  /* transition: 0.3s; */
 }
 
 .reviewBarLabel {
   width: 50px;
-  padding:5px;
+  padding: 5px 5px 5px 0;
   text-align: center;
+  margin-right: 7px;
 }
 
 .reviewBar {
@@ -1010,8 +1656,29 @@ a:visited {
   width: 300px;
   margin-top: 5px;
   margin-right: 5px;
-  /* background-color: pink; */
-  /* border: 2px solid red; */
+}
+
+.ratingStarIndicator {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80px;
+  padding-left: 5px;
+}
+
+.ratingStarIndicator u {
+  color: ${(props) => props.theme.burlyAndTeal};
+  cursor: pointer;
+}
+
+.ratingStarIndicatorStars {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.ratingStarIndicatorStars p {
+  margin: 0;
 }
 
 /*
@@ -1024,7 +1691,10 @@ a:visited {
   flex-direction: row;
   flex-wrap: wrap;
   width: 400px;
-  /* border: 2px solid black; */
+}
+
+.reviewSideCharacteristics {
+  padding-left: 4px;
 }
 
 .reviewCharacteristicLabel {
@@ -1040,7 +1710,6 @@ a:visited {
 
 .reviewCharacteristicBar {
   height: 10px;
-  /* width: 300px; */
   background-color: gray;
   margin-top: 18px;
   margin-right: 2px;
@@ -1052,10 +1721,17 @@ a:visited {
   width: 300px;
   margin-left: 60px;
   justify-content: space-between;
-  /* text-align: center; */
   height: 30px;
-  /* font-size: 30px; */
 }
+
+.reviewCharacteristicBarLabels p {
+  margin-top: 0;
+}
+
+.reviewCharacteristicArrow {
+  margin-top: 10px;
+}
+
 
 
 
@@ -1067,10 +1743,77 @@ a:visited {
 .reviewListHeader {
   display: flex;
   flex-direction: row;
-  width: 900px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 400px;
+}
+
+.reviewSearchSection {
+  display: inline-flex;
+  border-bottom: 1px solid burlywood;
+  width: 780px;
+  height: 50px;
+  padding: 0 10px;
   align-items: center;
-  margin-right: 50px;
+}
+
+.reviewSearchBar {
+  display: inline-flex;
+  width: 780px;
+  height: 50px;
+  background-color: transparent;
+  border: 0;
+  font-size: 16px;
+  color: ${(props) => props.theme.qandaPlaceholder};
+  caret-color: ${(props) => props.theme.fontColor};
+}
+
+
+.reviewSearchBarIcon {
+  float: right;
+  border: none;
+  background-color: transparent;
+  font-size: 30px;
+}
+
+.reviewSearchBar::placeholder {
+  display: flex;
+  font-size: 16px;
+  color: ${(props) => props.theme.qandaPlaceholder};
+}
+
+.reviewListHeader {
+  padding: 0 10px;
+}
+
+.reviewSortSection span {
+  border-bottom: 1px solid burlywood;
+  cursor: pointer;
+}
+
+.reviewSortDropDown {
+  position: absolute;
+  padding: 5px;
+  background-color: ${(props) => props.theme.mainBColor};
+  width: 80px;
+  box-shadow: 0px 8px 16px 0px ${(props) => props.theme.dropdownShadow};
+  z-index: 1;
+}
+
+.reviewSortDropDown p {
+  color: ${(props) => props.theme.fontColor};
+  padding: 5px;
+  margin: 0;
+  margin-bottom: 3px;
+}
+
+.reviewSortDropDown p:last-child {
+  margin: 0;
+}
+
+.reviewSortDropDown p:hover {
+  background-color: ${(props) => props.theme.burlyAndTeal};
+  color: ${(props) => props.theme.defaultPrice};
+  cursor: pointer;
 }
 
 .reviewListHeader h3 {
@@ -1078,8 +1821,6 @@ a:visited {
 }
 
 .reviewTile {
-  /* background-color: red; */
-  /* height: 200px; */
   border-bottom: 2px solid burlywood;
   padding: 4px 10px;
 }
@@ -1095,9 +1836,9 @@ a:visited {
   border-bottom: 1px solid black;
 }
 
-.reviewPhotoThumbnailSection {
-  /* height: 150px; */
-  /* background-color: pink; */
+.reviewTileShowMore {
+  cursor: pointer;
+  width: 80px;
 }
 
 .reviewPhotoThumbnailSection img:hover{
@@ -1119,6 +1860,10 @@ a:visited {
   flex-direction: row;
   justify-content: space-between;
   padding: 0 20px;
+}
+
+.reviewInteractions u {
+  color: ${(props) => props.theme.burlyAndTeal};
 }
 
 .reviewHelpful {
@@ -1145,6 +1890,11 @@ a:visited {
 .reviewExpandButton {
   height: 60px;
   margin-right: 10px;
+  color: ${(props) => props.theme.buttonText};
+}
+
+.reviewCheckmark {
+  color: ${(props) => props.theme.fontColor};
 }
 
 /**********************
@@ -1160,8 +1910,8 @@ a:visited {
   transform: translate(-50%, -50%);
   padding: 10px;
   background-color: white;
-  border: 2px solid teal;
-  z-index: 1;
+  border: 2px solid ${(props) => props.theme.burlyAndTeal};
+  z-index: 50;
   overflow-y: auto;
 }
 
@@ -1175,12 +1925,6 @@ a:visited {
   INPUT OVERLAY
 ***********************/
 
-.reviewOverlay {
-
-  /* height: 100vh;
-  width: 100vh; */
-}
-
 .reviewOverlayBackground {
   position: fixed;
   top: 0;
@@ -1189,6 +1933,7 @@ a:visited {
   opacity: 30%;
   height: 100vh;
   width: 100vw;
+  z-index: 49;
 }
 
 /**********************
@@ -1197,7 +1942,7 @@ a:visited {
 
 .reviewInput {
   position: fixed;
-  --height: 900px;
+  --height: 92vh;
   --width: 1000px;
   top: calc(50% - (var(--height) / 2));
   left: calc(50% - (var(--width) / 2));
@@ -1205,9 +1950,9 @@ a:visited {
   height: var(--height);
   width: var(--width);
   padding: 6px 18px;
-  background-color: #1c1c1e;
+  background-color: ${(props) => props.theme.mainBColor};
   border: 2px solid burlywood;
-  z-index: 1;
+  z-index: 50;
   overflow-y:scroll;
 }
 
@@ -1264,10 +2009,28 @@ a:visited {
   height: 60px;
   width: 150px;
   margin-top: 40px;
+  color: ${(props) => props.theme.fontColor};
+  background-color: ${(props) => props.theme.tealAndBurly};
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border-style: none;
 }
 
 .reviewSubmitEnable {
   cursor: pointer;
+}
+
+.reviewInputErrors {
+  position: absolute;
+  left: 700px;
+  top: 985px;
+  color: red;
+}
+
+.reviewInputErrors p {
+  margin: 0;
+  margin-bottom: 5px;
+  margin-left: 6px;
 }
 
 /*
@@ -1305,13 +2068,7 @@ a:visited {
   flex-wrap: wrap;
   height: auto;
   padding: 1px 5px;
-  /* background-color: red; */
 }
-
-/* .reviewInputRecommendations h3 {
-  width: 100%;
-  margin: 0;
-} */
 
 .reviewInputRecommendations input {
   margin-right: 6px;
@@ -1320,7 +2077,6 @@ a:visited {
 
 .reviewInputRecommendations p {
   margin: 0;
-  /* margin-top: 14px; */
   margin-right: 40px;
 }
 
@@ -1329,9 +2085,6 @@ a:visited {
 */
 
 .reviewInputCharacteristicsAggregate {
-  /* border: 1px solid black;
-  border-left: 0;
-  border-right: 0; */
   padding: 1px 5px;
   width: 550px;
 }
@@ -1342,25 +2095,17 @@ a:visited {
   flex-wrap: wrap;
   height: auto;
   margin-top: 5px;
-  /* padding-left: 5px; */
   border-bottom: 1px solid white;
-  /* border: 1px solid red; */
 }
 
 .reviewInputCharacteristicSection:first-child {
   margin-top: 0;
 }
 
-.reviewInputCharacteristicSection:last-child {
-  /* border-bottom: 0; */
-  /* border: 1px solid red; */
-}
 
 .reviewInputCharacteristicLabel {
   margin: 0;
   margin-bottom: 3px;
-  /* width: 100%; */
-  /* background-color: red; */
 }
 
 .reviewInputCharacteristicButtons {
@@ -1368,7 +2113,6 @@ a:visited {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  /* border: 1px solid blue; */
 }
 
 .reviewInputCharacteristicButtons input {
@@ -1380,7 +2124,6 @@ a:visited {
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  /* border: 2px solid green; */
 }
 
 .reviewInputCharacteristicsDescriptors p {
@@ -1392,60 +2135,39 @@ a:visited {
 */
 
 .reviewInputPhotoSection {
-  /* box-sizing: border-box; */
   display: flex;
   flex-direction: row;
   height: 110px;
-  /* max-height: 120px; */
   width: calc(var(--width) - 100px);
-  /* padding: 5px; */
-  /* background-color: red; */
-  border: 1px solid black;
-  background-color: white;
+  border: ${(props) => props.theme.burlyBorderBlack};
+  background-color: ${(props) => props.theme.mainBColor};
 }
 
 .reviewInputPhotoThumbnail {
   height: 100px;
   margin: 5px;
   margin-right: 10px;
-  /* width: 80px; */
 }
 
 .reviewInputPhotoButton {
-  /* box-sizing: border-box; */
   display: flex;
   flex-direction: column;
-  /* grid-template-rows: 50% 30px; */
-  /* grid-template-columns: 50%; */
   background-color: #cccccc;
   height: 110px;
   width: 80px;
   justify-content: center;
   align-items: center;
   color: black;
-  /* align-content: center; */
 }
 
 .reviewInputPhotoButton:hover {
-  background-color: burlywood;
+  background-color: ${(props) => props.theme.tealAndBurly};
   cursor: pointer;
 }
 
 .reviewInputPhotoButtonPlus {
-  /* display: flex;
-  justify-content: center;
-  align-content: center; */
-  /* grid-row: 2; */
-  /* grid-column: 2; */
   font-size: 40px;
   margin: auto;
-}
-
-.reviewInputPhotoButtonText {
-  /* display: flex;
-  justify-content: center;
-  align-content: center; */
-  /* grid-row: 3; */
 }
 
 button:hover {
@@ -1455,9 +2177,37 @@ button:hover {
 .reviewExpandButton {
   border-radius: 5px;
   height: 30px;
-  background-color: ${(props) => props.theme.burlyAndTeal};
+  background-color: ${(props) => props.theme.tealAndBurly};
+  color: ${(props) => props.theme.fontColor};
   border-style: none;
 }
 
+.fourOhFour {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0b1e1c;
+  z-index: 10;
+}
+
+.fourOhFourImage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 11;
+}
+
+.fourOhFourTimer {
+  position: absolute;
+  font-size: 40px;
+  top: 18%;
+  width: 100%;
+  z-index: 11;
+  text-align: center;
+  -webkit-text-stroke: 2px black;
+}
 
 `;

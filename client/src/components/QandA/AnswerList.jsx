@@ -1,32 +1,42 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Parse from '../../parse.js';
-import axios from 'axios';
+
 import Answer from './Answer.jsx';
 
 const AnswerList = (props) => {
   const [count, setCount] = useState(2);
+  const [helpfulAnswers, setHelpfulAnswers] = useState({});
 
   let answers = props.answers;
   let answerCount = answers.length;
   let answerList;
 
+  useEffect(() => {
+    setHelpfulAnswers(JSON.parse(localStorage.getItem('helpfulAnswers')));
+  }, []);
+
   let handleShowMore = () => {
-    setCount(count + 2);
+    setCount(answerCount);
+  }
+
+  let handleShowLess = () => {
+    setCount(2);
   }
 
   if (count < answerCount) {
-    answerList = answers.slice(0, count).map(answer =>
-      <Answer answer={answer}/>)
+    answerList = answers.slice(0, count).map((answer, index) =>
+      <Answer key={answer.answer_id} answer={answer} count={count} index={index} answerCount={answerCount} helpfulAnswers={helpfulAnswers}/>)
   } else {
-    answerList = answers.map(answer =>
-      <Answer answer={answer}/>)
+    answerList = answers.map((answer, index) =>
+      <Answer key={answer.answer_id} answer={answer} count={count} index={index} answerCount={answerCount} helpfulAnswers={helpfulAnswers}/>)
   }
 
   return (
     <div className='answers'>
       {answerList}
-      {count > 2 || (count < answerCount && count > 2) &&
-      <button onClick={handleShowMore}>Show More Answers</button>}
+      {(count < answerCount && count >= 2) &&
+      <button className='showAnswersButton' onClick={handleShowMore}>MORE ANSWERS</button>}
+      {(count >= answerCount && answerCount > 2) &&
+      <button className='showAnswersButton' onClick={handleShowLess}>COLLAPSE ANSWERS</button>}
     </div>
   )
 }
